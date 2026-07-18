@@ -1,0 +1,57 @@
+baseURL = "https://xiaohuzai.github.io/"
+title = "小虎崽的博客"
+theme = "PaperMod"
+languageCode = "zh-cn"
+defaultContentLanguage = "zh"
+hasCJKLanguage = true
+paginate = 10
+enableRobotsTXT = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[params]
+  env = "production"
+  description = "记录 AI、自动驾驶与工程实践"
+  author = "xiaohuzai"
+  DateFormat = "2006-01-02"
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  TocOpen = false
+
+  [params.homeInfoParams]
+    Title = "Hi，我是小虎崽 👋"
+    Content = "这里记录我的技术学习笔记 —— AI、自动驾驶、工程实践。"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/xiaohuzai"
+
+  [params.cover]
+    hidden = true
+    hiddenInList = true
+
+[[menu.main]]
+  name = "文章"
+  url = "/posts/"
+  weight = 1
+
+[[menu.main]]
+  name = "归档"
+  url = "/archives/"
+  weight = 2
+
+[[menu.main]]
+  name = "搜索"
+  url = "/search/"
+  weight = 3
+
+[[menu.main]]
+  name = "GitHub"
+  url = "https://github.com/xiaohuzai"
+  weight = 4
