@@ -3,16 +3,19 @@ name: Deploy Hugo site to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
+
+# Allow one deployment + one PR build at a time; newer PR builds cancel in-flight ones.
+concurrency:
+  group: "pages"
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
   pages: write
   id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 defaults:
   run:
@@ -54,7 +57,9 @@ jobs:
         with:
           path: ./public
 
+  # Only deploy on push to main — PR builds skip this job entirely.
   deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
