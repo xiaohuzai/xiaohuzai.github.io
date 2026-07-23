@@ -1,57 +1,117 @@
 baseURL = "https://xiaohuzai.github.io/"
 title = "小虎崽的博客"
-theme = "PaperMod"
-languageCode = "zh-cn"
-defaultContentLanguage = "zh"
-hasCJKLanguage = true
-paginate = 10
-enableRobotsTXT = true
 
+theme = "congo"
+
+# Language
+defaultContentLanguage = "zh-hans"
+defaultContentLanguageInSubdir = false
+hasCJKLanguage = true
+
+# Pagination
+[pagination]
+  pagerSize = 10
+
+# Outputs
 [outputs]
   home = ["HTML", "RSS", "JSON"]
 
+# Privacy
+[privacy]
+  [privacy.vimeo]
+    enableDNT = true
+  [privacy.x]
+    enableDNT = true
+  [privacy.youtube]
+    privacyEnhanced = true
+
+# Site params
 [params]
   env = "production"
   description = "记录 AI、自动驾驶与工程实践"
-  author = "xiaohuzai"
   DateFormat = "2006-01-02"
-  defaultTheme = "auto"
-  ShowReadingTime = true
-  ShowShareButtons = false
-  ShowPostNavLinks = true
-  ShowBreadCrumbs = true
-  ShowCodeCopyButtons = true
-  ShowToc = true
-  TocOpen = false
+  mainSections = ["posts"]
 
-  [params.homeInfoParams]
-    Title = "Hi，我是小虎崽 👋"
-    Content = "这里记录我的技术学习笔记 —— AI、自动驾驶、工程实践。"
+  # Author (Congo requires this as a table, not a string)
+  [params.author]
+    name = "xiaohuzai"
+    # image = "img/avatar.jpg"   # uncomment + drop a 512×512 jpg to add avatar
+    links = [
+      { github = "https://github.com/xiaohuzai" },
+    ]
 
-  [[params.socialIcons]]
-    name = "github"
-    url = "https://github.com/xiaohuzai"
+  # === Congo theme params ===
+  colorScheme = "congo"
+  defaultAppearance = "light"
+  autoSwitchAppearance = true
 
-  [params.cover]
-    hidden = true
-    hiddenInList = true
+  enableSearch = true
+  enableCodeCopy = true
+  enableImageLazyLoading = true
+  enableImageWebp = true
+  enableQuicklink = true
+
+  fingerprintAlgorithm = "sha256"
+
+  # Header
+  [params.header]
+    layout = "basic"
+    showTitle = true
+
+  # Footer
+  [params.footer]
+    showCopyright = true
+    showThemeAttribution = true
+    showAppearanceSwitcher = true
+    showScrollToTop = true
+
+  # Homepage — "profile" layout = centered author card + recent posts below
+  [params.homepage]
+    layout = "profile"
+    showRecent = true
+    recentLimit = 5
+
+  # Article
+  [params.article]
+    showDate = true
+    showDateUpdated = false
+    showReadingTime = true
+    showTableOfContents = true
+    showWordCount = true
+    showEdit = false
+    showAuthor = true
+
+  # Profile (used by homepage layout = "profile")
+  [params.profile]
+    name = "xiaohuzai"
+    headline = "AI / 自动驾驶 / 工程实践"
+    bio = "记录我的技术学习笔记 —— AI、自动驾驶、工程实践。"
+    # image = "img/avatar.jpg"   # uncomment + drop a 512×512 jpg to add avatar
+    links = [
+      { github = "https://github.com/xiaohuzai" },
+    ]
+
+  # Taxonomies — categories + tags
+  [params.taxonomy]
+    showTermCount = true
+
+# Menu
+[[menu.main]]
+  name = "Posts"
+  pageRef = "posts"
+  weight = 10
 
 [[menu.main]]
-  name = "文章"
-  url = "/posts/"
-  weight = 1
+  name = "Archive"
+  pageRef = "archive"
+  weight = 20
 
 [[menu.main]]
-  name = "归档"
-  url = "/archives/"
-  weight = 2
+  name = "Tags"
+  pageRef = "tags"
+  weight = 30
 
 [[menu.main]]
-  name = "搜索"
-  url = "/search/"
-  weight = 3
-
-[[menu.main]]
-  name = "GitHub"
-  url = "https://github.com/xiaohuzai"
-  weight = 4
+  name = "Search"
+  pageRef = "search"
+  weight = 40
