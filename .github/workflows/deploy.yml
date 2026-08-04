@@ -17,6 +17,9 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  HUGO_VERSION: 0.164.0
+
 defaults:
   run:
     shell: bash
@@ -24,8 +27,6 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      HUGO_VERSION: 0.164.0
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,14 +58,49 @@ jobs:
         with:
           path: ./public
 
-  # Only deploy on push to main — PR builds skip this job entirely.
+  # Run htmltest on a fresh build to catch broken internal links/images.
+  # Fails the PR (and blocks deploy) on any broken internal reference.
+  link-check:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install Hugo
+        run: |
+          wget -O /tmp/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${{ env.HUGO_VERSION }}/hugo_extended_${{ env.HUGO_VERSION }}_linux-amd64.deb
+          sudo dpkg -i /tmp/hugo.deb
+
+      - name: Build with Hugo
+        env:
+          HUGO_ENVIRONMENT: production
+          TZ: Asia/Shanghai
+        # baseURL="/" makes Hugo emit host-less permalinks (/posts/foo/), so
+        # htmltest treats post/nav/asset links as internal (checkable) instead
+        # of external (skipped by IgnoreExternalURLs). Doesn't affect the
+        # production deploy, which builds separately above.
+        run: hugo --gc --minify --baseURL "/"
+
+      - name: Install htmltest
+        run: |
+          curl -sL -o /tmp/htmltest.tar.gz https://github.com/wjdp/htmltest/releases/download/v0.17.0/htmltest_0.17.0_linux_amd64.tar.gz
+          tar xzf /tmp/htmltest.tar.gz -C /tmp htmltest
+
+      - name: Run htmltest
+        run: /tmp/htmltest
+
+  # Only deploy on push to main - PR builds skip this job entirely.
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, link-check]
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

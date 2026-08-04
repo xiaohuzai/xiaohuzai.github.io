@@ -1,10 +1,10 @@
 ---
-title: "博客样式测试：代码、图片、公式、流程图"
+title: "博客样式测试：代码、图片、公式、流程图、ECharts"
 date: 2026-07-23T18:30:00+08:00
 draft: false
 tags: ["测试", "Congo", "Hugo"]
 categories: ["技术"]
-summary: "迁移到 Congo 主题后的渲染测试 —— 验证代码高亮、图片、KaTeX 公式、Mermaid 流程图都能正常显示。"
+summary: "迁移到 Congo 主题后的渲染测试 —— 验证代码高亮、图片、KaTeX 公式、Mermaid 流程图、ECharts 图表都能正常显示。"
 ---
 
 这是迁移到 Congo 主题后的第一篇测试文章。用来一次性验证下面这些类型的内容都能正常渲染。
@@ -79,6 +79,51 @@ sequenceDiagram
     SP-->>U: 流式显示
 {{< /mermaid >}}
 
+## ECharts 图表
+
+`{{</* echarts */>}}` 短码，参数写 ECharts 的 option（JS 对象字面量，不是严格 JSON，所以键不用引号、还能写函数）。用 `height` 调高度。
+
+柱状图：
+
+{{< echarts >}}
+{
+  title: { text: "各框架 Star 数（示意）", left: "center" },
+  tooltip: { trigger: "axis" },
+  xAxis: {
+    type: "category",
+    data: ["LangChain", "LangGraph", "CrewAI", "AutoGen"]
+  },
+  yAxis: { type: "value", name: "stars (k)" },
+  series: [{
+    type: "bar",
+    data: [98, 12, 24, 39],
+    itemStyle: { borderRadius: [4, 4, 0, 0] }
+  }]
+}
+{{< /echarts >}}
+
+饼图（用 `height="360px"` 自定义高度）：
+
+{{< echarts height="360px" >}}
+{
+  title: { text: "博客内容构成（示意）", left: "center" },
+  tooltip: { trigger: "item" },
+  legend: { bottom: 0 },
+  series: [{
+    type: "pie",
+    radius: ["40%", "70%"],
+    data: [
+      { value: 40, name: "AI 笔记" },
+      { value: 25, name: "自动驾驶" },
+      { value: 20, name: "工程实践" },
+      { value: 15, name: "随笔" }
+    ]
+  }]
+}
+{{< /echarts >}}
+
+> 图表配色会自动跟随博客主题：点右上角切换明暗，柱子/文字/tooltip 都会跟着变色。
+
 ## 表格
 
 | 框架 | 抽象层级 | 状态 |
@@ -93,6 +138,7 @@ sequenceDiagram
 - [x] PaperMod → Congo 主题迁移
 - [x] 启用 Profile 布局 + GitHub 社交链接
 - [x] 验证代码高亮 / 图片 / 公式 / 流程图
+- [x] 加 ECharts 短码（主题感知配色）
 - [ ] 给博客加个头像
 - [ ] 选个 Congo 内置 colorScheme
 

@@ -1,0 +1,11 @@
+<div class="echarts">
+  {{ $id := delimit (shuffle (seq 1 9)) "" }}
+  {{ $height := .Get "height" | default "400px" }}
+  <div id="{{ $id }}" style="width:100%;height:{{ $height }};"></div>
+  <script type="text/javascript">
+    window.addEventListener("DOMContentLoaded", () => {
+      const el = document.getElementById("{{ $id }}");
+      window.initEChartsChart(el, {{ .Inner | safeJS }});
+    });
+  </script>
+</div>
