@@ -8,6 +8,19 @@ defaultContentLanguage = "zh-hans"
 defaultContentLanguageInSubdir = false
 hasCJKLanguage = true
 
+# Single-language (Chinese) setup. Congo ships an English language config
+# (languages.en.toml) by default; disable it so Hugo emits no empty /en/ shell
+# and no duplicate /zh-hans/ section alongside the root.
+# zh-hans must be defined explicitly once any [languages.*] table exists,
+# since it is the defaultContentLanguage.
+[languages.zh-hans]
+  languageCode = "zh-hans"
+  languageName = "简体中文"
+  weight = 1
+
+[languages.en]
+  disabled = true
+
 # Pagination
 [pagination]
   pagerSize = 10
