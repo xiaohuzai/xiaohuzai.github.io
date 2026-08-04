@@ -1,0 +1,16 @@
+# htmltest config - runs in CI on the built ./public directory.
+#
+# Scope: internal links only. IgnoreExternalURLs=true skips any URL with a
+# host (truly external links, plus same-host absolute URLs), so only host-less
+# root-absolute links are checked. The link-check CI build uses `--baseURL "/"`
+# so Hugo emits host-less permalinks (/posts/foo/ instead of https://.../posts/foo/),
+# which makes post/navigation/asset links fall into scope.
+DirectoryPath: public
+IgnoreExternalURLs: true
+CheckMeta: false
+CheckAnchors: false   # Hugo encodes CJK TOC hrefs but leaves heading ids raw; skip to avoid false positives
+# Taxonomy term pages (tags/<term>, categories/<term>) are auto-generated from
+# post front matter, so links to them can never dangle. Skip them -- this also
+# sidesteps percent-encoding mismatches on CJK term paths.
+IgnoreURLs:
+  - ^/(tags|categories)/[^/]+

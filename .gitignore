@@ -1,3 +1,6 @@
 public/
 resources/_gen/
 .hugo_build.lock
+
+# Claude Code local data
+.claude/
