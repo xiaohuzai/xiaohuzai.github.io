@@ -225,6 +225,10 @@ plugins:
       priority: 60
   - source: "./local-plugins/mermaid-offline"
     enabled: true
+  # 化学式：构建链路里的 KaTeX 没有 mhchem 扩展，直接写 \ce{...} 会渲染成红色的 "\ce"；
+  # 这里在解析 markdown 之前把它翻译成等价的 KaTeX（Obsidian 那边 MathJax 本来就认 \ce）
+  - source: "./local-plugins/mhchem-lite"
+    enabled: true
   # 目录层级样式（TOC 插件输出的是平铺列表，这里注入样式做成树）
   - source: "./local-plugins/toc-tree"
     enabled: true
