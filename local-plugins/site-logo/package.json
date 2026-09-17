@@ -1,0 +1,25 @@
+{
+  "name": "site-logo",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Morrowind-wiki 风格的站标：虎耳终端 SVG + 站名，替代文字版 page-title",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./components": "./dist/components/index.js"
+  },
+  "quartz": {
+    "name": "site-logo",
+    "displayName": "Site Logo",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "components": {
+      "SiteLogo": {
+        "displayName": "Site Logo",
+        "defaultPosition": "header",
+        "defaultPriority": 10
+      }
+    }
+  }
+}
