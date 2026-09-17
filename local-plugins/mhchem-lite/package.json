@@ -1,0 +1,14 @@
+{
+  "name": "mhchem-lite",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "把 \\ce{...} 在构建时翻译成 KaTeX（本仓库构建链路里没有 mhchem 扩展，直接写 \\ce 会渲染成红色报错）",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "mhchem-lite",
+    "displayName": "mhchem lite",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}
