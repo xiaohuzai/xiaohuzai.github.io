@@ -33,7 +33,7 @@
 - **加粗闭合的坑**：`**…**` 后面紧跟汉字时，如果闭合的 `**` 前一个字符是标点（`）`、`”`、`。`），CommonMark 不认它是闭合标记，站点会原样显示 `**`。写 `**…（…）**的过程` 要么留一个空格，要么让标点收尾
 - 段落之间空一行。`hard-line-breaks` 插件已启用：**单个换行会渲染成 `<br>`**，所以不要把一句话折成两行
 - 列表项之间不要留「只有空白的行」（会造成松散列表和多余空行）；`-` 项与 `1.` 项各自统一
-- 别留空表头行；表格里写双链别名要转义：`| [[完整文件名\|显示文字]] |`
+- 表格第一行必须是真表头：**空表头（`|   |   |` + `|---|`）要把首行数据提上来当表头**，别让表头空着；一张表里只允许一条分隔行。写双链别名要转义：`| [[完整文件名\|显示文字]] |`（脚本会查）
 
 **公式与图**
 
@@ -66,7 +66,7 @@
 
 ## 三、帮忙写 tag
 
-- **只从现有标签里选，不要造同义词**：`生物`、`基础知识`、`AI制药`、`AlphaFold`、`工具`、`元`（用之前先 `grep -rh "^tags:" -A4 content/notes` 看一眼现状）
+- **先查现状再选，不要为同一个概念造近义标签**：`grep -rh -A6 "^tags:" content/notes | grep '  - ' | sort -u`。当前大致是 `生物`（各篇都挂）、`基础知识`、`AI制药`、`AlphaFold`、`Rosetta`、`工具`、`元`
 - 标签不能含空格（Obsidian 会判为无效标签）：是 `AI制药`，不是 `AI 制药`
 - 每篇 1–3 个：领域 + 层级/课程（例：`生物` + `AlphaFold`）
 - 要新建标签时先跟用户说一声（会多出一个标签页）
@@ -112,7 +112,8 @@ for p in sorted(pathlib.Path("content").rglob("*.md")):
         continue                      # excalidraw 等插件文件由插件接管
     fence = in_fm = text_block = math_block = False
     FENCE = "`" * 3          # 不写成三个连续反引号，否则会截断本文档自己的代码块
-    for i, ln in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
+    lines = p.read_text(encoding="utf-8").split("\n")
+    for i, ln in enumerate(lines, 1):
         if i == 1 and ln.strip() == "---": in_fm = True; continue
         if in_fm:
             if ln.strip() == "---": in_fm = False
@@ -141,6 +142,15 @@ for p in sorted(pathlib.Path("content").rglob("*.md")):
         for m in bold.finditer(ln):                        # **…（…）**的 → 站点显示字面 **
             if punct(ln[m.end()-3]) and re.match(f"[{CJK}A-Za-z0-9]", ln[m.end():m.end()+1] or ""):
                 report("加粗闭合失效", ln[max(0,m.start()-12):m.end()+8])
+        # 表格：空表头 / 多余分隔行（首行数据应提升为表头）
+        nxt = lines[i] if i < len(lines) else ""
+        if "|" in ln and re.match(r"^\s*\|?[\s:\-|]+\|?\s*$", nxt) and "-" in nxt:
+            hdr = [c.strip() for c in ln.strip().strip("|").split("|")]
+            if all(c == "" for c in hdr):
+                report("空表头", ln.strip()[:40])
+            rest = [x for x in lines[i + 1:i + 12] if x.strip() and "|" in x]
+            if any(re.match(r"^\s*\|?[\s:\-|]+\|?\s*$", x) and "-" in x for x in rest):
+                report("多余分隔行", ln.strip()[:40])
         masked = ln
         for pat in MASK:
             masked = re.sub(pat, lambda m: " " * len(m.group(0)), masked)
