@@ -12,6 +12,7 @@ configuration:
     - templates
     - .obsidian
     - .trash
+    - wiki # Karpathy LLM Wiki 插件的产物（LLM 生成，英文），只留本地不发布
   theme:
     fontOrigin: googleFonts
     cdnCaching: true

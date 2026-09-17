@@ -13,8 +13,12 @@ quartz/cli/tui/dist/
 .turbo/
 # Obsidian vault：.obsidian 设置本身要提交（换机器拉下来即用），
 # 只忽略每台机器各自 churn 的 workspace 和缓存
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-.obsidian/.cache
+# 注意：带斜杠的 pattern 锚定仓库根目录，所以必须带 content/ 前缀
+content/.obsidian/workspace.json
+content/.obsidian/workspace-mobile.json
+content/.obsidian/.cache/
 content/.trash/
+# LLM wiki（Karpathy LLM Wiki 插件的产物）：本地自用，不进版本库
+content/wiki/
+content/.llm-wiki-backups/
 theme-preview-hub/
