@@ -50,7 +50,16 @@ git push
 
 然后开一个 `dev → main` 的 PR（标题随意），等 CI 构建检查过了点 merge，合并即部署。攒几篇一起合也行，不必一篇一个 PR。
 
-嫌手动麻烦，在 Obsidian 里装 [obsidian-git](https://github.com/Vinzent03/obsidian-git) 插件，配成改动即自动 commit/push 到 `dev`，写作循环退化成「只管写，想起来点一下 merge」。
+**merge 完 PR 后**，本地 `dev` 要追一下 `main`——PR 是在 GitHub 上合的，本地分支不会自己动，不追的话下次开写就踩在旧底上：
+
+```bash
+git switch dev
+git fetch origin
+git merge origin/main
+git push                 # 顺手把远端 dev 也对齐
+```
+
+嫌手动麻烦，在 Obsidian 里装 [obsidian-git](https://github.com/Vinzent03/obsidian-git) 插件，配成改动即自动 commit/push 到 `dev`。它只管 commit/push 这半截，PR 的 merge 还是得自己点（或用 `gh pr create --fill && gh pr merge --merge` 一条龙），写作循环退化成「只管写，想起来点一下 merge」。
 
 ## 本地预览（可选）
 
