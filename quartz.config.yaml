@@ -231,6 +231,9 @@ plugins:
   # 图谱连线可见性（把非激活的边从 --lightgray 重映射成可辨识的灰）
   - source: "./local-plugins/graph-links"
     enabled: true
+  # 让 theme.colors 的调色板真正生效（否则会被主题包的 @layer 覆盖）
+  - source: "./local-plugins/config-palette"
+    enabled: true
   - source: "@quartz-community/reader-mode"
     enabled: true
     layout:

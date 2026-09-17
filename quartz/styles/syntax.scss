@@ -1,3 +1,6 @@
+// 注意：quartz/styles/ 目录在当前 Quartz 5 中不参与构建（本仓库无任何代码引用它，
+// 产物里也没有这些文件的样式）。站点级自定义样式请写在 local-plugins/ 下的插件里，
+// 参考 local-plugins/config-palette/ 与 local-plugins/toc-tree/。
 code[data-theme*=" "] {
   color: var(--shiki-light);
   background-color: var(--shiki-light-bg);

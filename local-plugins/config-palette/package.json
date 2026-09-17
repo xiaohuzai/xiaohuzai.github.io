@@ -1,0 +1,14 @@
+{
+  "name": "config-palette",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "让 quartz.config.yaml 里 theme.colors 的调色板真正生效：配置色会被编译进最低优先级的 @layer quartz-base，而 @quartz-themes/core 在更高优先级的 @layer obsidian-theme 里用主题包自己的调色板覆盖它；本插件把配置色以无 layer 样式重新注入（CSS 规则里无 layer 优先于任何 layer）",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "config-palette",
+    "displayName": "Config Palette",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}
