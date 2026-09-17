@@ -1,0 +1,14 @@
+{
+  "name": "graph-links",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "让关系图谱的连线可见：图谱把非激活的边画成 --lightgray（亮色主题下是 #f6f6f6，白底上几乎看不见），插件没有颜色配置项，这里在运行时把这种极浅/极深的近中性描边重映射成可辨识的灰",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "graph-links",
+    "displayName": "Graph Links Visible",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}

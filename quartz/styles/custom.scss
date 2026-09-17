@@ -1,3 +1,7 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+//
+// 注意：这个文件目前没有接入 Quartz 5 的构建（改这里不会出现在产物里）。
+// 站点级自定义样式请放到 local-plugins/ 下，用插件 externalResources 的
+// css 资源注入，参考 local-plugins/toc-tree/。

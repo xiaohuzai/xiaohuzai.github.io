@@ -1,0 +1,14 @@
+{
+  "name": "toc-tree",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "给目录（TOC）补层级样式：目录插件输出的是平铺列表（只有 depth-N 类名），默认只有 1rem 缩进、字号颜色一致，看起来是平的；这里把层级做成树",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "toc-tree",
+    "displayName": "TOC Tree",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}
