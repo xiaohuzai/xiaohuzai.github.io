@@ -1,0 +1,14 @@
+{
+  "name": "mermaid-offline",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "把 mermaid 客户端渲染本地化：import map 将 OFM 插件对 cdnjs 的动态 import 重定向到站内文件（cdnjs 在部分地区不可达，原脚本无容错，失败即静默不渲染）",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "mermaid-offline",
+    "displayName": "Mermaid Offline",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}

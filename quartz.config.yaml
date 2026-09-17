@@ -222,6 +222,8 @@ plugins:
     layout:
       position: footer
       priority: 60
+  - source: "./local-plugins/mermaid-offline"
+    enabled: true
   - source: "@quartz-community/reader-mode"
     enabled: true
     layout:
