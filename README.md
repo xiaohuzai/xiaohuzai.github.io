@@ -1,18 +1,23 @@
 # 小虎仔的小站
 
-Obsidian vault + [Quartz 5](https://quartz.jzhao.xyz) 的数字花园。`content/` 文件夹本身就是一个 Obsidian vault：git pull 下来用 Obsidian 打开写作，push 之后 GitHub Actions 自动构建，约一分钟后 [xiaohuzai.github.io](https://xiaohuzai.github.io) 就是新内容。
+Obsidian vault + [Quartz 5](https://quartz.jzhao.xyz) 的数字花园。`content/` 文件夹本身就是一个 Obsidian vault：git pull 下来用 Obsidian 打开写作，日常在 `dev` 分支上提交，PR 合并进 `main` 后 GitHub Actions 自动构建，约一分钟后 [xiaohuzai.github.io](https://xiaohuzai.github.io) 就是新内容。
 
 ## 日常写作循环
 
+`main` 有分支保护（要求 PR，参照 browsa 的规则），日常开发都在 `dev` 上：
+
 ```bash
+git switch dev
 git pull                 # 开写前先拉
 # …用 Obsidian 打开 content/ 编辑…
 git add -A
 git commit -m "写了一篇…"
-git push                 # push 即部署
+git push
 ```
 
-嫌手动麻烦，在 Obsidian 里装 [obsidian-git](https://github.com/Vinzent03/obsidian-git) 插件，配成改动即自动 commit/push，写作循环退化成「只管写」。
+然后开一个 `dev → main` 的 PR（标题随意），等 CI 构建检查过了点 merge，合并即部署。攒几篇一起合也行，不必一篇一个 PR。
+
+嫌手动麻烦，在 Obsidian 里装 [obsidian-git](https://github.com/Vinzent03/obsidian-git) 插件，配成改动即自动 commit/push 到 `dev`，写作循环退化成「只管写，想起来点一下 merge」。
 
 ## 本地预览（可选）
 
@@ -40,7 +45,8 @@ frontmatter 常用字段：`title` / `date` / `tags`。posts 用 ASCII 文件名
 ## 站点配置
 
 - `quartz.config.yaml` — 主配置：站点标题、locale（zh-CN）、baseUrl、主题色、全部插件开关
-- `.github/workflows/deploy.yml` — Pages 部署流水线（repo 的 Pages 源已设为 GitHub Actions，无需再动设置）
+- `.github/workflows/deploy.yml` — Pages 部署流水线：push/合并进 `main` 自动触发（也支持手动触发）
+- `.github/workflows/ci.yml` — PR 构建检查：`dev → main` 的 PR 上先跑一遍完整构建
 - 想改站点 UI 文案：`quartz/i18n/locales/zh-CN.ts`（跟随上游，一般不用碰）
 
 以后若通过 `npx quartz plugin add` 装了 git 来源的插件（生成 `quartz.lock.json`），需要把 `npx quartz plugin install` 步骤加回 deploy.yml（参考 [Quartz hosting 文档](https://quartz.jzhao.xyz/docs/hosting)）；目前全部插件都是 npm 依赖，`npm ci` 已覆盖。
