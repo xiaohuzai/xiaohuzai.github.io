@@ -1,0 +1,25 @@
+{
+  "name": "footer-extras",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "页脚彩蛋：回到顶部 + 随机页面（Morrowind-wiki 风格）",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./components": "./dist/components/index.js"
+  },
+  "quartz": {
+    "name": "footer-extras",
+    "displayName": "Footer Extras",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "components": {
+      "FooterExtras": {
+        "displayName": "Footer Extras",
+        "defaultPosition": "footer",
+        "defaultPriority": 60
+      }
+    }
+  }
+}

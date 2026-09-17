@@ -1,0 +1,25 @@
+{
+  "name": "links-nav",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Morrowind-wiki 风格的顶部图标导航栏",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./components": "./dist/components/index.js"
+  },
+  "quartz": {
+    "name": "links-nav",
+    "displayName": "Links Nav",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "components": {
+      "LinksNav": {
+        "displayName": "Links Nav",
+        "defaultPosition": "header",
+        "defaultPriority": 20
+      }
+    }
+  }
+}

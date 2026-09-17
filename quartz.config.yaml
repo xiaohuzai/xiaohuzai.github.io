@@ -113,7 +113,7 @@ plugins:
   - source: "@quartz-themes/core"
     enabled: true
     options:
-      theme: tokyo-night
+      theme: default
       mode: both
   - source: "@quartz-community/remove-draft"
     enabled: true
@@ -196,7 +196,7 @@ plugins:
       position: beforeBody
       priority: 30
   - source: "@quartz-community/page-title"
-    enabled: true
+    enabled: false # 用 local-plugins/site-logo（Morrowind 风格站标）替代
     layout:
       position: left
       priority: 10
@@ -206,6 +206,22 @@ plugins:
       position: left
       priority: 30
       group: toolbar
+  # Morrowind-wiki 风格定制：站标 + 图标导航 + 页脚彩蛋（本地插件，源码在 local-plugins/）
+  - source: "./local-plugins/site-logo"
+    enabled: true
+    layout:
+      position: header
+      priority: 10
+  - source: "./local-plugins/links-nav"
+    enabled: true
+    layout:
+      position: header
+      priority: 20
+  - source: "./local-plugins/footer-extras"
+    enabled: true
+    layout:
+      position: footer
+      priority: 60
   - source: "@quartz-community/reader-mode"
     enabled: true
     layout:
