@@ -1,10 +1,8 @@
 .DS_Store
-.gitignore
 node_modules
 public
 prof
 tsconfig.tsbuildinfo
-.obsidian
 .quartz-cache
 private/
 .replit
@@ -12,3 +10,9 @@ replit.nix
 .quartz/
 quartz/cli/tui/dist/
 .turbo/
+# Obsidian vault：.obsidian 设置本身要提交（换机器拉下来即用），
+# 只忽略每台机器各自 churn 的 workspace 和缓存
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/.cache
+content/.trash/
