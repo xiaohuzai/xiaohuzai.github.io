@@ -35,6 +35,10 @@ $$
 \int_{-\infty}^{\infty} e^{-x^2} \, dx = \sqrt{\pi}
 $$
 
+用 Excalidraw 画的图，`![[文件名]]` 嵌进来原样发布：
+
+![[2026-09-17-excalidraw-demo.excalidraw.md]]
+
 ## 结语
 
 写作约定（posts 与 notes 的分工、命名规则）在仓库 README 里。开写。
