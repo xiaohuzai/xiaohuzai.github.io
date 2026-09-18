@@ -76,7 +76,29 @@ Obsidian 的 sanitizer 配置（`/Applications/Obsidian.app/Contents/Resources/o
 - 需要联网（viewer 与结构文件都在远端）。
 - 想离线看本地 `.cif/.pdb`，可考虑社区插件 **ChemRender3D**（`ruzx/chemrender3d`，MIT，内部就是 Mol\* 4.18）——但它是未经官方人工审核的插件、装机量极低，装之前自己评估。
 
-## 三、坑（都是实测踩出来的）
+## 三、想一次装多条结构：MVS 路线（能跑，但有硬限制）
+
+托管 viewer 支持用 **MolViewSpec**（MVS）声明式地描述场景，`mvs-data=<URL 编码的 JSON>` 就能一次装两条结构。JSON 的形状有讲究，这个 bundle 实测只接受下面这一种：
+
+```json
+{ "metadata": { "version": "1.0.0" }, "root": { "kind": "root", "children": [
+  { "kind": "download", "params": { "url": "https://.../AF-Q818B4-F1-model_v6.cif" },
+    "children": [{ "kind": "parse", "params": { "format": "mmcif" },
+      "children": [{ "kind": "structure", "params": { "type": "model" },
+        "children": [{ "kind": "component", "params": { "selector": "polymer" },
+          "children": [{ "kind": "representation", "params": { "type": "cartoon" },
+            "children": [{ "kind": "color", "params": { "color": "#2b7fd0" } }] }] }] }] }] }] }] }
+```
+
+节点种类只有：`camera canvas clip color component coordinates download focus instance interpolate label opacity parse primitive primitives representation source transform uri`。踩到的三个限制：
+
+1. **版本号必须在 `metadata.version` 里。** 写成顶层 `{"version":"1.0.0","root":...}` 会报 `Version should be a string, not undefined` + `Loaded MVS does not contain valid version info.`，画布全空。
+2. **参数是白名单校验收紧的。** `download` 只认 `url`（多传 `format` → `Unknown parameter "format"`）；`color` 只认 `color`（多传 `kind` → `Unknown parameter "kind"`），所以**没法用 MVS 指定 pLDDT/uncertainty 这类按属性上色**，只能给统一色。
+3. **没有叠合（superposition）。** 节点列表里没有对齐/叠合节点，两条坐标框架不同的结构会**并排**摆着，不会叠在一起。EMBL 那个 Figure 11 的叠合效果是他们把 `.molj` 快照（含变换与配色）一起发出来实现的，靠 URL 参数复刻不了。要让两条真正叠合，得自己在内联方案里算变换矩阵，或者直接用他们的快照。
+
+另外 MVS 会多出 Mol\* 的 state 快照控件（`msp-state-snapshot-viewport-controls`，界面上是个带时间戳的 `[1/1] … [▶]` 条），`?afdb=` 这种单结构加载方式没有这个控件。托管 viewer 也**没有**关掉右上角那排视口按钮（Reset Zoom / Orient Axes …）的 URL 参数——`hide-controls=1` 只管右侧的 Structure Tools 面板。
+
+## 四、坑（都是实测踩出来的）
 
 1. **正文栏宽度会把视口挤成 0。** 托管 viewer 默认展开左（Structure，约 290px）和右（Structure Tools，约 283px）两个面板；本站正文栏在 1280 宽的桌面视口下只有 582px，两个面板正好吃光，3D 视口宽度变成 0——看起来"加载了但没画面"。必须带 `hide-controls=1&collapse-left-panel=1`。别用 `?afdb=` 单参数就下结论。
 2. **`loadStructureFromUrl` 的格式名是陷阱。** `structure-url-format=bcif` 直接报 `unknown data format name 'bcif'`；参数里写 `'bcif'` 或 `'mmcif'` 也都失败。更坑的是**不传格式时 Promise 照样 resolve**，只有 console 里报 `Unexpected token. Expected data_, loop_, or data name.`（拿文本 CIF 解析器去吃二进制）。于是"加载完成"的标志位是 true、画布却是空白 —— 这就是为什么必须验像素，见 `SKILL.md` 第四节。用 `loadAlphaFoldDb(id)` / `loadPdb(id)` 绕开格式名。
@@ -85,3 +107,17 @@ Obsidian 的 sanitizer 配置（`/Applications/Obsidian.app/Contents/Resources/o
 5. **探针服务要确认真的绑上了端口。** 本机的 `--serve` 常驻在 8899，随手 `python3 -m http.server 8899` 会静默失败（`Address already in use`）而 curl 照样 200——你测的其实是用户正在跑的站点，会得出"内容没生效"的错误结论。选冷门端口并检查启动日志。
 6. **别直接写 `saved-theme` 测暗色**（会绕过 `themechange`，缓存与背景都不刷新），点真实的暗色切换按钮。
 7. 探测渲染时用 `npx quartz build -d <临时目录> -o <临时输出>` 就能在 `/tmp` 下整站验证，**不碰 `content/`**，不会和同时开着的 Obsidian 打架。
+8. **`fullPage: true` 的整屏截图会把嵌进去的结构截成空白。** 全页截图会触发视口尺寸变化，Mol\* 的 WebGL 画布重排后这一帧还没画完，于是"章节截图里是一块空的格子"——很容易误判成没嵌进去。正确做法：先 `scrollIntoView`，用**视口坐标** `clip` 截图（不要 `fullPage`），并等几秒让画布重绘。用元素级 `elementHandle.screenshot()` 也正常。
+9. **暗色模式下 iframe 里的画布不会跟着变暗。** 托管 viewer 的背景色是它自己的，`?afdb=` 这类加载在 Flexoki 暗色页面上就是一块亮色面板（想让它跟随主题只有内联方案那条路）。当前取舍是接受它——交互式结构查看器自带浅底，视觉上和一个"工具面板"差不多。
+
+## 五、本仓库当前用法
+
+第 6 篇 `6. How accurate are AlphaFold 2 structure predictions?.md` 的「四、页面里的 Figure 11」用的是 A 方案的简化版：
+
+```html
+<div style="height:440px">
+<iframe src="https://molstar.org/viewer/?afdb=Q818B4&hide-controls=1&collapse-left-panel=1" style="width:100%;height:100%;border:0;border-radius:6px" title="苯丙氨酸羟化酶 AlphaFold 模型 AF-Q818B4-F1"></iframe>
+</div>
+```
+
+选它的理由：iframe 在 **Obsidian 阅读视图里也能显示**（笔记主要在 vault 里读），而内联方案在 Obsidian 只会留一个空 div；`?afdb=` 单结构加载既没有 MVS 那个状态条，也是唯一能免费拿到 **pLDDT 上色**的路径。原文 Figure 11 的"灰色 7VGM 叠合对比"复刻不了（见第三节第 3 条），所以图注里点明这一点，把叠合留给原文。
