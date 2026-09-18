@@ -49,6 +49,9 @@ export function LinksNav() {
   gap: 0.35em;
   color: var(--darkgray);
   border-radius: 6px;
+  /* 窄屏下 flex 会把每项压扁，中文标签被挤成竖排——禁止收缩和换行 */
+  flex: 0 0 auto;
+  white-space: nowrap;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 .links-nav-item svg {
