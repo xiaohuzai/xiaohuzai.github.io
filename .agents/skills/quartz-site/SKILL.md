@@ -98,6 +98,7 @@ npx quartz build -o public-<主题名>
 ## 参考
 
 - `references/SYNTAX.md` — **实测过的** Obsidian 语法支持矩阵：哪些在站上正常、哪些会坏。写笔记前不确定某个语法能不能用，先查这张表
+- `references/EMBED-3D.md` — 在笔记里嵌 Mol\* 交互式 3D 结构（站点与 Obsidian 同一段 iframe 即可）；含 Mol\* 的 WebGL 探测方法、加载格式名的坑、以及"宽度把视口挤成 0"的坑
 - `scripts/render-shots.mjs` — 无头浏览器批量截图 / 拼版对比
 - 仓库根 `AGENTS.md` — 改笔记的清单与红线
 - `README.md` 的「外观主题」一节 — 换主题的操作步骤
