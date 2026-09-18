@@ -160,7 +160,13 @@ for p in sorted(pathlib.Path("content").rglob("*.md")):
             hdr = [c.strip() for c in ln.strip().strip("|").split("|")]
             if all(c == "" for c in hdr):
                 report("空表头", ln.strip()[:40])
-            rest = [x for x in lines[i + 1:i + 12] if x.strip() and "|" in x]
+            rest = []
+            for x in lines[i + 1:i + 30]:
+                # 只在同一张表内找第二条分隔行：遇到空行或标题就停。
+                # 否则相邻两张表（各自有表头）会被误报成"多余分隔行"
+                if not x.strip() or x.lstrip().startswith("#"):
+                    break
+                rest.append(x)
             if any(re.match(r"^\s*\|?[\s:\-|]+\|?\s*$", x) and "-" in x for x in rest):
                 report("多余分隔行", ln.strip()[:40])
         masked = ln
@@ -179,7 +185,6 @@ PY
 **脚本的已知盲区与误报**（别被它误导）：
 
 - **方括号残留查不出来**：像 `[图3]（对应 Figure 9）` 这种机器残留不在检测范围内（屏蔽规则只吃掉 `[文字](半角括号)` 形式的链接，半角标点表也不含 `[]`）。这类要靠人眼过一遍
-- **相邻两张表会被误报「多余分隔行」**：把一个主题拆成两张表（各自有表头）是合法的，脚本只看 12 行内有没有第二条分隔行
 - **换引号要循环处理到稳定**：一行里出现**两对以上**直引号时，只替换一对的写法会漏。用 `while` 反复替换直到本行不再变化
 - 脚本报出「你刚修好的问题」——先怀疑是**用户在你的编辑之间又改了同一个文件**，重新读一遍再动手
 
