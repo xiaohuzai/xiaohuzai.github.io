@@ -91,6 +91,31 @@ frontmatter 常用字段：`title` / `date` / `tags`。posts 用 ASCII 文件名
 - `.github/workflows/ci.yml` — PR 构建检查：`dev → main` 的 PR 上先跑一遍完整构建
 - 想改站点 UI 文案：`quartz/i18n/locales/zh-CN.ts`（跟随上游，一般不用碰）
 
+### 外观主题
+
+主题用 [quartz-themes](https://quartz-themes.github.io/) 的 **Flexoki**（暖白纸感 + 青绿强调色，暗色是近黑），换主题只改两处：
+
+```yaml
+# quartz.config.yaml
+  - source: "@quartz-themes/core"
+    options:
+      theme: flexoki    # ← 改这里
+```
+
+```bash
+npm install @quartz-themes/<新主题>   # 必须装成依赖，CI 用 npm ci，不装会构建失败
+```
+
+改完 `theme:` 后，把 `configuration.theme.colors` 那两组色值也换成新主题的（`@quartz-themes/<名>/theme.json` 里能查到），否则 `config-palette` 插件会继续注入旧配色。可选项见 [quartz-themes 主题库](https://quartz-themes.github.io/)（250 个左右，含 minimal / catppuccin / tokyo-night 等），每个主题的示例页都在线可看。
+
+`@quartz-themes/core` 支持按「方面」混搭，比如表格用 A 主题、代码块用 B 主题：
+
+```yaml
+      aspects:
+        tables: minimal
+        code: tokyo-night
+```
+
 以后若通过 `npx quartz plugin add` 装了 git 来源的插件（生成 `quartz.lock.json`），需要把 `npx quartz plugin install` 步骤加回 deploy.yml（参考 [Quartz hosting 文档](https://quartz.jzhao.xyz/docs/hosting)）；目前全部插件都是 npm 依赖，`npm ci` 已覆盖。
 
 ## 升级 Quartz

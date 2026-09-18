@@ -20,27 +20,30 @@ configuration:
       header: Schibsted Grotesk
       body: Source Sans Pro
       code: IBM Plex Mono
+    # 配色跟随 @quartz-themes/flexoki（暖白纸感 + 青绿强调色）。
+    # 下面这组值就是 Flexoki 的实际色板，写在这里是为了保留「改配置即生效」这个开关：
+    # config-palette 会以无 layer 样式注入，优先级高于主题包。
     colors:
       lightMode:
-        light: "#faf8f8"
-        lightgray: "#e5e5e5"
-        gray: "#b8b8b8"
-        darkgray: "#4e4e4e"
-        dark: "#2b2b2b"
-        secondary: "#284b63"
-        tertiary: "#84a59d"
-        highlight: rgba(143, 159, 169, 0.15)
-        textHighlight: "#fff23688"
+        light: "#FFFCF0"
+        lightgray: "#F2F0E5"
+        gray: "#6F6E69"
+        darkgray: "#100F0F"
+        dark: "#100F0F"
+        secondary: "#24847C"
+        tertiary: "#29998A"
+        highlight: rgba(255, 208, 0, 0.15)
+        textHighlight: "#FFD00066"
       darkMode:
-        light: "#161618"
-        lightgray: "#393639"
-        gray: "#646464"
-        darkgray: "#d4d4d4"
-        dark: "#ebebec"
-        secondary: "#7b97aa"
-        tertiary: "#84a59d"
-        highlight: rgba(143, 159, 169, 0.15)
-        textHighlight: "#b3aa0288"
+        light: "#100F0F"
+        lightgray: "#1C1B1A"
+        gray: "#878580"
+        darkgray: "#CECDC3"
+        dark: "#CECDC3"
+        secondary: "#29998A"
+        tertiary: "#2CAE98"
+        highlight: rgba(255, 208, 0, 0.15)
+        textHighlight: "#FFD00066"
 plugins:
   - source: "@quartz-community/created-modified-date"
     enabled: true
@@ -114,7 +117,7 @@ plugins:
   - source: "@quartz-themes/core"
     enabled: true
     options:
-      theme: default
+      theme: flexoki
       mode: both
   - source: "@quartz-community/remove-draft"
     enabled: true
@@ -186,6 +189,7 @@ plugins:
     layout:
       position: beforeBody
       priority: 10
+      condition: not-index # 首页顶部已有站标，不再重复一遍站名
   - source: "@quartz-community/content-meta"
     enabled: true
     layout:
@@ -290,6 +294,7 @@ plugins:
         - aliases
       excludedProperties: []
       hidePropertiesView: false
+      collapsed: true # 默认折叠成一行，标题下不再压一大块属性表
       delimiters: ---
       language: yaml
     order: 5
