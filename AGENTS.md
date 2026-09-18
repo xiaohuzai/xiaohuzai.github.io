@@ -4,6 +4,15 @@
 
 站点的写作循环、目录约定、Obsidian 设置见 [README.md](README.md)，这里不重复。本文件只讲「改笔记/加笔记时怎么算改好了」。
 
+**相关 skill（随仓库提交，在 `.agents/skills/`）**
+
+| Skill | 什么时候看 |
+| --- | --- |
+| `quartz-site` | 改外观（主题、配色、布局、`local-plugins` 样式）、验证渲染结果、或想知道某个 Obsidian 语法在这个站上到底渲不渲染 |
+| `obsidian-markdown` | 查 Obsidian 原生语法怎么写（第三方，kepano/obsidian-skills，MIT） |
+
+下面第五节的「怎么验证」是速查版；**要动外观或做截图取证，看 `quartz-site` 的完整流程**（含可用的截图脚本与实测语法矩阵）。
+
 ## 关键路径
 
 | 位置 | 是什么 |
@@ -14,7 +23,8 @@
 | `content/attachments/` | 图片附件 |
 | `local-plugins/` | 站点样式/行为定制（**唯一**该放样式与构建改写的地方）；`mhchem-lite` 负责 `\ce{}` → KaTeX |
 | `quartz/` | Quartz 上游源码，**不参与本站构建**，不要改 |
-| `quartz.config.yaml` | 站点与插件总开关 |
+| `quartz.config.yaml` | 站点与插件总开关；外观主题见 `@quartz-themes/core` 的 `theme:` 与 `configuration.theme.colors`（换主题要两处一起改，见 README「外观主题」） |
+| `.agents/skills/` | 随仓库提交的 skill：`quartz-site`（本站外观改动与渲染验证）、`obsidian-markdown`（第三方，Obsidian 语法参考）。**改外观或验证渲染前先看 `quartz-site`** |
 
 ## 一、渲染效果（Obsidian 和站点两边都要好看）
 
@@ -88,6 +98,8 @@ npx quartz build --serve --port 8899  # 本地预览
 ```
 
 - 浏览器里逐项看：**目录层级（两级树）、公式、表格、callout、mermaid（要看渲染出的 `<svg>`，不是原始文本）、浅色与深色**
+- **窄屏（390px 宽）也要看一眼**：左侧文件树收成抽屉、顶部导航（文章/笔记/标签/GitHub）横排一行不换行。导航项被挤成竖排是因为 flex 压扁了，`local-plugins/links-nav` 里已用 `flex: 0 0 auto` + `white-space: nowrap` 锁住
+- **改外观（`theme:`、`colors:`、插件 options）后必须重启 `--serve` 并重新截图**：改完不重启会看到旧样式，误判成「改了没用」
 - `--serve` 的 watch 不复制新加/替换的图片 → 换过附件必须重跑一次完整 build
 - **改了 `local-plugins/` 里的插件代码，必须重启 `--serve`**：watch 只重跑内容管线，插件模块在服务启动时就加载好了，不重启会一直用旧代码（症状：手动 `npx quartz build` 的产物是对的、浏览器里看到的还是旧的）
 - **watch 模式会被「新建又改名/删除」的临时文件搞崩**（报 `Failed to process markdown …/未命名.md: ENOENT` 后进程退出）。这是 Obsidian 建新笔记时留下的，不是内容问题，重启 `--serve` 即可；崩过之后记得跑一次完整 build 补上产物
@@ -163,6 +175,21 @@ PY
 ```
 
 脚本只覆盖机械问题，**内容错误、tag 是否合适、有没有反链、渲染好不好看，仍然要人（或你）逐页判断**。
+
+**脚本的已知盲区与误报**（别被它误导）：
+
+- **方括号残留查不出来**：像 `[图3]（对应 Figure 9）` 这种机器残留不在检测范围内（屏蔽规则只吃掉 `[文字](半角括号)` 形式的链接，半角标点表也不含 `[]`）。这类要靠人眼过一遍
+- **相邻两张表会被误报「多余分隔行」**：把一个主题拆成两张表（各自有表头）是合法的，脚本只看 12 行内有没有第二条分隔行
+- **换引号要循环处理到稳定**：一行里出现**两对以上**直引号时，只替换一对的写法会漏。用 `while` 反复替换直到本行不再变化
+- 脚本报出「你刚修好的问题」——先怀疑是**用户在你的编辑之间又改了同一个文件**，重新读一遍再动手
+
+## 六、改外观（主题、配色、布局、样式）
+
+对外观动手前**先看 `quartz-site` skill**，这里只列最要紧的三条：
+
+- **换主题要三处同改**：`@quartz-themes/core` 的 `theme:`、`configuration.theme.colors`（否则 `config-palette` 会继续注入旧配色，看着像「换了没效果」）、`package.json` 依赖（CI 是 `npm ci`，不写进依赖会构建失败）
+- **改了 `local-plugins/` 或配置后必须重启 `--serve`**：watch 不重载插件与配置，不重启就会拿旧样式下结论
+- **先测量，再下结论**。不要凭一张截图断言渲染有问题——本次差点据此提交一个错误的"中文加粗失效"修复，实测墨量后才发现加粗一直正常，真正的问题是截图裁切坐标错位。判断字体/颜色用 `getComputedStyle`，判断元素是否存在要限定在正文 `<article>` 范围内（整页 HTML 里的 `<meta name="description">` 会把标记剥成纯文本，据此判断会得出错误结论）
 
 ## 红线
 
