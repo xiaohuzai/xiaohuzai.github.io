@@ -239,6 +239,9 @@ plugins:
   # 图谱连线可见性（把非激活的边从 --lightgray 重映射成可辨识的灰）
   - source: "./local-plugins/graph-links"
     enabled: true
+  # 正文图片点击放大：大图会被正文栏缩到小字不可读；点开后按原始像素 1:1 显示、可滚动平移，Esc 关闭
+  - source: "./local-plugins/image-zoom"
+    enabled: true
   # 让 theme.colors 的调色板真正生效（否则会被主题包的 @layer 覆盖）
   - source: "./local-plugins/config-palette"
     enabled: true

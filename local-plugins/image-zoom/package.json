@@ -1,0 +1,14 @@
+{
+  "name": "image-zoom",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "正文图片点击放大：正文栏会把大图（torchview 数据流图这类）缩到小字不可读，这里给 article 内的图片加点击放大——遮罩层按原始像素 1:1 显示、可滚动平移，点任意处或按 Esc 关闭。Obsidian 阅读视图里想看原大，直接打开附件文件即可",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "image-zoom",
+    "displayName": "Image Zoom",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}
