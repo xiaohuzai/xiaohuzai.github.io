@@ -3,5 +3,6 @@
   "alwaysUpdateLinks": true,
   "newLinkFormat": "shortest",
   "useMarkdownLinks": false,
-  "showInlineTitle": true
+  "showInlineTitle": true,
+  "promptDelete": false
 }
