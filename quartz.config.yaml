@@ -253,6 +253,10 @@ plugins:
       group: toolbar
   - source: "@quartz-community/breadcrumbs"
     enabled: true
+    # 默认 showCurrentPage: true 会在面包屑末尾再放一次本页标题，与下面的正文 H1 重复；
+    # 关掉后面包屑止于上级目录
+    options:
+      showCurrentPage: false
     layout:
       position: beforeBody
       priority: 5
