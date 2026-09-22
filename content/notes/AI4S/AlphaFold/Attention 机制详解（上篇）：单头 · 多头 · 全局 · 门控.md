@@ -110,9 +110,9 @@ self.linear_q = nn.Linear(c_in, c*N_head, bias=False)   # mha.py:53
 
 #### 3.3 逐步数据流图
 
-torchview 追踪 `MultiHeadAttention(c_in=64, N_head=4, gated=True)` 的真实前向，每个框标注了角色名和形状：
+torchview 追踪的真实前向（一个薄包装器包住 `MultiHeadAttention(64, 16, 4, gated=True)`，以便把 bias 的来路也画进去）。**右路就是 bias 的一生**：`输入 z（pair 表征）→ ZLayerNorm → PairBiasProj（每头一份）→ moveaxis 出厂对齐 → view 中间插 1 → add ★`——“z 的先验在这里进入打分”这个 ★ 节点，就是 §3.5 说的注入口（完整三问见下篇 §2.1）。左路是常规的 QKV → 打分 → softmax → 加权汇总 → 拼头 → 门控 → 输出：
 
-![[MHA 数据流 1.png]]
+![[MHA 数据流 2.png]]
 
 #### 3.4 多头的参数量是“免费”的吗？
 
@@ -134,13 +134,21 @@ torchview 追踪 `MultiHeadAttention(c_in=64, N_head=4, gated=True)` 的真实�
 
 #### 3.5 bias 参数：怎么把先验加进打分（广播细节）
 
-**语义一句话**：`bias` 加在 softmax **之前**的打分上，等于给每对 (i, j) 的“关注度”注入先验。这是**所有 Transformer 的通用机制**，不限于 AlphaFold，常见例子：
+**语义一句话**：`bias` 加在 softmax **之前**的打分上，等于给每对 (i, j) 的“关注度”注入先验。这是**所有 Transformer 的通用机制**，不限于 AlphaFold。
 
-- **相对位置偏置**（Transformer 原文 / T5）：按 i−j 的距离加一个可学习偏置——“离得近的 token 更值得看”；
-- **ALiBi**：按距离线性衰减的固定偏置，让远距离天然降权；
-- **padding mask**：给无效位置的分数加 −1e8（本质就是一种 bias）。
+**先分清两条路线：“位置信息”从哪进模型？**（“位置编码”这个词被两条路共用，是混淆之源）
 
-AlphaFold 的用法是把 pair 表征 z 投影成 bias——让“残基 i、j 的关系”影响“序列里谁关注谁”。这部分涉及 z 的故事，**作用 / 来源 / 梯度回传三问的完整解答见下篇 §2.1**。上篇只需记住：**bias 通道 = 打分的“先验注入口”**，它与 Q/K/V 的内容匹配项相加后一起进 softmax——内容决定底线，先验做加减分。
+- **输入端加性路线（embedding 侧）**：进网络**前**加到词嵌入上——2017 原文的正弦绝对位置编码就在这里（BERT/GPT 的可学习位置 embedding 同属此路）。**它不是 bias，也和打分无关**——注意力只能从输入表示里间接感知位置。
+- **打分端路线（attention 侧，= 本节的 bias 家族）**：直接加在 QKᵀ 打分上，进 softmax 前生效。
+
+**打分端 bias 家族的例子：**
+
+- **T5 相对位置偏置**（2020；思想源头 Shaw 2018 / Transformer-XL 2019；2017 原文没有）：相对距离分桶，每桶一个可学习标量——“离得近的 token 更值得看”；
+- **ALiBi**：固定的线性距离衰减，远距离天然降权；
+- **padding mask**：给无效位置的分数加 −1e8；
+- **AlphaFold 的 pair bias**：relpos（残基索引差分桶，与 T5 几乎同款）→ 编进 z 初始特征 → 经 `linear_z` 变成 bias 回灌打分。比 T5 更进一步：偏置不是静态查找表，而是从**可学习的 pair 表征**里现算的（作用 / 来源 / 梯度三问见下篇 §2.1）。
+
+上篇只需记住：**bias 通道 = 打分的“先验注入口”**，它与 Q/K/V 的内容匹配项相加后一起进 softmax——内容决定底线，先验做加减分。
 
 难的不是语义，是**形状对齐**。分数张量是 `(*, N_head, q, k)`，而 bias 常常比它**少几根前导轴**。真实例子（行注意力，B=2、S=4、R=5、8 头）：
 
@@ -148,6 +156,17 @@ AlphaFold 的用法是把 pair 表征 z 投影成 bias——让“残基 i、j �
 分数 a          (2, 4, 8, 5, 5)      ← B, S, N_head, R, R
 z 来的 bias     (2,    8, 5, 5)      ← B, N_head, R, R —— 没有 S 维！
 ```
+
+bias 没有 S 维，但语义上**同一份 pair bias 对每条序列都适用**——所以解法是：给 bias 补一根长度为 1 的轴，让广播机制自动把它复制到 S 上。`mha.py:229-234` 逐行拆：
+
+```python
+bias_batch_shape = bias.shape[:-3]              # 去掉末 3 维 (N_head,q,k) → (2,)，剩 bias 自带的批量维
+n = a.ndim - len(bias_batch_shape) - 3          # 分数比 bias 多几根轴？5-1-3 = 1（就是 S 轴）
+bias = bias.view(*batch, (1,)*n, N_head, q, k)  # 中间插 1 → (2, 1, 8, 5, 5)
+a = a + bias                                    # 广播：size-1 自动扩成 4，每条序列用同一份 bias
+```
+
+**为什么 1 插在“中间”（批量维之后、N_head 之前）？** 因为对齐规则是“前导维对前导维、末 3 维对末 3 维”，插进去的 1 恰好填补中间缺口；要是把 1 插在最前面（变成 `(1, 2, 8, 5, 5)`），2 就会对上分数的 S=4——维度错配直接报错。**为什么写成通用的 `n`？** 因为这个类被 5 种场景复用、分数秩不同：行/三角注意力 5 维（n=1），情感分析的 4 维分数配 4 维 bias（n=0，一根都不插）——`n` 自动适配所有调用方式。
 
 ### 4. Global Attention：多头 + “全局”档
 
