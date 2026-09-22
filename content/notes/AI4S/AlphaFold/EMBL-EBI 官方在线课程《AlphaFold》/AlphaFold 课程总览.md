@@ -27,5 +27,10 @@ EMBL-EBI 官方在线课程 *AlphaFold: an introductory guide to its strengths a
 | --- | --- | --- |
 | 5 | 预测结果是怎么被验证的：CASP 盲测 + 四类结构生物学证据 | [[5. How have AlphaFold2’s predictions of protein structure been validated?\|AlphaFold2 的预测是怎么被验证的？]] |
 | 6 | 预测有多准：RMSD 与误差基线 | [[6. How accurate are AlphaFold 2 structure predictions?\|AlphaFold 2 的预测有多准？]] |
+| 7 | AF2 被科学家怎么用：九个案例，从结构解析到蛋白质设计 | [[7. How is AlphaFold 2 used by scientists?\|AlphaFold 2 被科学家怎么用？]] |
 
 课程还有「输入与输出」「如何访问与预测」「进阶建模」「AlphaMissense」「AlphaFold 3」等章节，尚未整理成笔记。
+
+## 相关笔记
+
+- [[Attention 机制详解（上篇）：单头 · 多头 · 全局 · 门控|注意力机制全解]]——另一门课 alphafold-decoded 第 3 课的配套笔记，讲清单头 / 多头 / Global 注意力与门控的机制。
