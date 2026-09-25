@@ -236,6 +236,9 @@ plugins:
   # 目录层级样式（TOC 插件输出的是平铺列表，这里注入样式做成树）
   - source: "./local-plugins/toc-tree"
     enabled: true
+  # 文件夹列表页排版（folder-page 产物裸奔：标题过大、日期换行、标签圆点悬空）
+  - source: "./local-plugins/folder-listing"
+    enabled: true
   # 图谱连线可见性（把非激活的边从 --lightgray 重映射成可辨识的灰）
   - source: "./local-plugins/graph-links"
     enabled: true
