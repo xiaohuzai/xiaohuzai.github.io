@@ -33,4 +33,6 @@ EMBL-EBI 官方在线课程 *AlphaFold: an introductory guide to its strengths a
 
 ## 相关笔记
 
-- [[Attention 机制详解（上篇）：单头 · 多头 · 全局 · 门控|注意力机制全解]]——另一门课 alphafold-decoded 第 3 课的配套笔记，讲清单头 / 多头 / Global 注意力与门控的机制。
+- [[AlphaFold 中的注意力详解（上篇）：单头 · 多头 · 全局 · 门控|注意力机制全解·上篇]]——另一门课 alphafold-decoded 第 3 课的配套笔记，讲清单头 / 多头 / Global 注意力与门控的机制。
+- [[AlphaFold 中的注意力详解（下篇）|注意力机制全解·下篇]]——上一篇的续篇，按算法 7、8、13/14、19、22 逐一拆解 AF2 里的每一种注意力（含 IPA）。
+- [[AlphaFold-Decode 课程总览|alphafold-decoded 课程总览]]——上面两篇所在的系列：跟着 kilianmandon 的教程逐步手写 AlphaFold，含特征提取等课程的笔记。

@@ -17,6 +17,7 @@ quartz/cli/tui/dist/
 content/.obsidian/workspace.json
 content/.obsidian/workspace-mobile.json
 content/.obsidian/.cache/
+content/.obsidian/plugins/qiaomu-ai-rss/image-cache/
 content/.trash/
 # LLM wiki（Karpathy LLM Wiki 插件的产物）：本地自用，不进版本库
 content/wiki/
