@@ -1,0 +1,14 @@
+{
+  "name": "folder-listing",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "文件夹列表页（@quartz-community/folder-page 产物）排版整理",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "folder-listing",
+    "displayName": "Folder Listing",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}
