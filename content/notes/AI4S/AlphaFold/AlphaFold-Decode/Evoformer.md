@@ -158,7 +158,7 @@ flowchart TB
         direction LR
         M1["MSA 表示<br/>序列 × 残基"] -->|"行注意力：序列内交流<br/>列注意力：物种间比较"| M2[新 MSA]
         Z1["pair 表示<br/>残基 × 残基"] -.->|偏置| M1
-        M2 -->|"Outer Product Mean<br/>共进化 → 残基关系"| Z2((+))
+        M2 -->|"Outer Product Mean<br/>共进化 → 残基关系"| Z2((⊕))
         Z1 --> Z2
         Z2 -->|"三角更新 + 三角注意力<br/>保证几何一致"| Z3[新 pair]
     end
@@ -490,7 +490,7 @@ flowchart LR
     LN --> G["sigmoid → g<br/>(r, r, 4, 32)"]
     LN --> B["b (r, r, 4)<br/>b[j, k]"]
     Q & K --> S["分数 (i, j, k, h)<br/>q[i,j]·k[i,k]"]
-    B -->|"对所有 i 广播"| ADD((+))
+    B -->|"对所有 i 广播"| ADD((⊕))
     S --> ADD
     ADD --> SM["softmax 沿 k"]
     SM --> O["Σ_k a · v[i,k]<br/>(r, r, 4, 32)"]

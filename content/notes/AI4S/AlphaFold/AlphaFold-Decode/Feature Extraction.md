@@ -224,11 +224,11 @@ profile = msa_onehot.mean(dim=0)   # (N_res, 22)
 
 ```mermaid
 flowchart TD
-    A[初始处理后的 MSA] --> B[1. 选择簇中心<br/>随机选 512 条]
-    B --> C[2. 簇中心 Masking<br/>随机替换部分残基]
-    C --> D[3. 簇分配<br/>extra 序列归到最相似的中心]
-    D --> E[4. 簇平均<br/>缺失数和氨基酸分布取平均]
-    E --> F[5. 特征堆叠<br/>拼接成 msa_feat / extra_msa_feat]
+    A[初始处理后的 MSA] --> B[① 选择簇中心<br/>随机选 512 条]
+    B --> C[② 簇中心 Masking<br/>随机替换部分残基]
+    C --> D[③ 簇分配<br/>extra 序列归到最相似的中心]
+    D --> E[④ 簇平均<br/>缺失数和氨基酸分布取平均]
+    E --> F[⑤ 特征堆叠<br/>拼接成 msa_feat / extra_msa_feat]
 
 ```
 ### 5.1. 选择簇中心
@@ -585,15 +585,15 @@ flowchart TD
     A[a3m 文件] --> B[初始处理<br/>缺失计数 / 去重 / one-hot]
     B --> AA["aatype → target_feat (N_res, 21)"]
     B --> RI["residue_index (N_res)"]
-    B --> C[1. 选簇中心<br/>随机抽 N_clust 条]
+    B --> C[① 选簇中心<br/>随机抽 N_clust 条]
 
     C -->|选中的| CC[簇中心 ×N_clust]
     C -->|剩下的| EX[extra 序列 ×N_extra]
 
-    CC --> D[2. Masking<br/>只作用于簇中心]
-    D --> E["3. 簇分配<br/>每条 extra 分到最近的簇中心"]
+    CC --> D[② Masking<br/>只作用于簇中心]
+    D --> E["③ 簇分配<br/>每条 extra 分到最近的簇中心"]
     EX -->|参与分配| E
-    E --> F["4. 簇平均<br/>簇中心 + 分到它的 extra 序列"]
+    E --> F["④ 簇平均<br/>簇中心 + 分到它的 extra 序列"]
     EX -->|one-hot 和缺失数参与平均| F
 
     D --> CM[cluster_msa 23]
