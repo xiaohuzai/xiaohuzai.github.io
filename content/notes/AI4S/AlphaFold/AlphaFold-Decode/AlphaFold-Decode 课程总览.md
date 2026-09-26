@@ -11,10 +11,11 @@ tags:
 | 课程 | 笔记 | 讲什么 |
 | --- | --- | --- |
 | 第 4 课 Feature Extraction | [[Feature Extraction]] | a3m 文件怎么变成 AlphaFold 的输入特征：初始处理、选簇中心、Masking、簇分配、簇平均、特征堆叠 |
+| 第 5 课 Evoformer | [[Evoformer]] | 48 个 block 的双轨更新：行/列注意力、Outer Product Mean、三角机制，偏置与转置的坑 |
 | 第 3 课 Attention | [[AlphaFold 中的注意力详解（上篇）：单头 · 多头 · 全局 · 门控\|注意力详解·上篇]] | 单头 / 多头 / Global / 门控——同一套缩放点积公式的不同配置 |
 | 第 5、8、9 课 | [[AlphaFold 中的注意力详解（下篇）\|注意力详解·下篇]] | 按 AF2 算法 7、8、13/14、19、22 逐一拆解每一种注意力（含 IPA） |
 
-建议阅读顺序：Feature Extraction（输入数据从哪来）→ 注意力上篇（机制地基）→ 下篇（AF2 里的每一种注意力）。
+建议阅读顺序：Feature Extraction（输入数据从哪来）→ 注意力上篇（机制地基）→ Evoformer（主干怎么运转）→ 下篇（AF2 里的每一种注意力）。
 
 ## 相关笔记
 

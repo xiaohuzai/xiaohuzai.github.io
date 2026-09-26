@@ -614,4 +614,4 @@ flowchart TD
 
 ```
 
-相关笔记：[[AlphaFold 中的注意力详解（上篇）：单头 · 多头 · 全局 · 门控|注意力详解·上篇]]　·　[[AlphaFold 中的注意力详解（下篇）|注意力详解·下篇]]　·　[[AlphaFold-Decode 课程总览|alphafold-decoded 课程总览]]
+相关笔记：[[Evoformer|下一节：Evoformer]]　·　[[AlphaFold 中的注意力详解（上篇）：单头 · 多头 · 全局 · 门控|注意力详解·上篇]]　·　[[AlphaFold 中的注意力详解（下篇）|注意力详解·下篇]]　·　[[AlphaFold-Decode 课程总览|alphafold-decoded 课程总览]]
