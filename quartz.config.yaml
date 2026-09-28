@@ -14,36 +14,40 @@ configuration:
     - .trash
     - wiki # Karpathy LLM Wiki 插件的产物（LLM 生成，英文），只留本地不发布
   theme:
-    fontOrigin: googleFonts
+    # local = 核心不再注入 Google Fonts CDN 链接（Head.tsx 只在 googleFonts 模式下注入），
+    # 字体由 local-plugins/site-style 的 @font-face 自托管接管
+    fontOrigin: local
     cdnCaching: true
+    # 字体实际由 local-plugins/site-style 自托管（Inter + JetBrains Mono，woff2 在
+    # quartz/static/fonts/），@quartz-community/quartz-fonts 已停用；这里只是文档性的记录，
+    # 重新启用该插件时保持两边一致。
     typography:
-      header: Schibsted Grotesk
-      body: Source Sans Pro
-      code: IBM Plex Mono
-    # 配色跟随 @quartz-themes/flexoki（暖白纸感 + 青绿强调色）。
-    # 下面这组值就是 Flexoki 的实际色板，写在这里是为了保留「改配置即生效」这个开关：
-    # config-palette 会以无 layer 样式注入，优先级高于主题包。
+      header: Inter
+      body: Inter
+      code: JetBrains Mono
+    # 配色：暖纸 + 深祖母绿的编辑风。亮色是暖白纸面，暗色是暖炭黑，强调色是深青绿。
+    # config-palette 会以无 layer 样式注入，优先级高于主题包——改这里即生效。
     colors:
       lightMode:
-        light: "#FFFCF0"
-        lightgray: "#F2F0E5"
-        gray: "#6F6E69"
-        darkgray: "#100F0F"
-        dark: "#100F0F"
-        secondary: "#24847C"
-        tertiary: "#29998A"
-        highlight: rgba(255, 208, 0, 0.15)
-        textHighlight: "#FFD00066"
+        light: "#FCFBF6"
+        lightgray: "#F1EFE7"
+        gray: "#6E6B62"
+        darkgray: "#2A2822"
+        dark: "#1A1914"
+        secondary: "#0F766B"
+        tertiary: "#0D9488"
+        highlight: rgba(15, 118, 107, 0.08)
+        textHighlight: "#FFCA4766"
       darkMode:
-        light: "#100F0F"
-        lightgray: "#1C1B1A"
-        gray: "#878580"
-        darkgray: "#CECDC3"
-        dark: "#CECDC3"
-        secondary: "#29998A"
-        tertiary: "#2CAE98"
-        highlight: rgba(255, 208, 0, 0.15)
-        textHighlight: "#FFD00066"
+        light: "#131211"
+        lightgray: "#1D1B18"
+        gray: "#8C8880"
+        darkgray: "#C8C4B8"
+        dark: "#EFEBE0"
+        secondary: "#3EB8A4"
+        tertiary: "#2CA892"
+        highlight: rgba(62, 184, 164, 0.12)
+        textHighlight: "#FFCA4747"
 plugins:
   - source: "@quartz-community/created-modified-date"
     enabled: true
@@ -112,8 +116,11 @@ plugins:
   - source: "@quartz-community/roam"
     enabled: false
     order: 92
+  # 字体改为自托管：local-plugins/site-style 直接 @font-face 引 quartz/static/fonts/ 的 woff2
+  # （Inter + JetBrains Mono），不走 Google Fonts CDN。停用本插件避免它再注入 CDN 链接
+  # 与冲突的 --bodyFont 变量；重新启用时记得与 configuration.theme.typography 对齐。
   - source: "@quartz-community/quartz-fonts"
-    enabled: true
+    enabled: false
   - source: "@quartz-themes/core"
     enabled: true
     options:
@@ -251,6 +258,9 @@ plugins:
     enabled: true
   # 让 theme.colors 的调色板真正生效（否则会被主题包的 @layer 覆盖）
   - source: "./local-plugins/config-palette"
+    enabled: true
+  # 全站视觉精修：自托管字体（@font-face + 字体栈）与排版/组件样式，颜色仍走 theme.colors
+  - source: "./local-plugins/site-style"
     enabled: true
   - source: "@quartz-community/reader-mode"
     enabled: true

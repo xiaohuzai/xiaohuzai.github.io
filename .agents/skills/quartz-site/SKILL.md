@@ -29,6 +29,10 @@ description: Use when changing THIS repository's site appearance or verifying th
 
 反过来，这也是保留「改配置即生效」这个开关的原因——想临时微调配色直接改 `colors:` 即可。
 
+**2b. 主题包还有一条「语义变量链」会绕过 colors**（config-palette 管不到的盲区）：主题包的 aspect 规则（body 背景、侧栏、文字色）用的是 `--background-primary`/`--text-normal` 这类 Obsidian 语义变量，它们链到主题包里**硬编码**的 `--color-base-*`（如 `--color-base-00: #FFFCF0`）——不引用 `--light`，所以改了 colors 正文背景可能不变色。`local-plugins/site-style` 已把 `--color-base-*`/`--color-accent*`/`--text-highlight-bg` 重新绑到调色板变量（`--color-base-00: var(--light)` 等）来夺回。**验证颜色是否真的生效，唯一可信判据是浏览器里 `getComputedStyle(body).backgroundColor`**，不要看变量表——`--light` 变了不等于 body 背景变了。改色后这层映射要跟着检查。
+
+**2c. 字体是自托管的**：Inter + JetBrains Mono 的 woff2 在 `quartz/static/fonts/`（quartz/static/ 会复制进 public/static/），`@font-face` 由 site-style 注入；`theme.fontOrigin: local` 让核心不注入 Google Fonts CDN 链接，`@quartz-community/quartz-fonts` 已停用。换字体时同步改 site-style 的 @font-face 与字体文件，`configuration.theme.typography` 只是文档性记录。
+
 **3. `--serve` 不会重载插件代码和配置**
 
 watch 只重跑内容管线。改动 `local-plugins/`、`quartz.config.yaml` 之后必须重启 `--serve`，否则浏览器里一直是旧样式，会误判成「改了没用」。验证插件类改动时，先 `npx quartz build` 看产物，再重启预览。
