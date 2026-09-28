@@ -1,0 +1,12 @@
+{
+  "name": "@local/site-style",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "全站视觉精修层：自托管字体（Inter + JetBrains Mono，文件在 quartz/static/fonts/）+ 排版/组件样式。字体不走 Google Fonts CDN，国内访问不依赖外网",
+  "quartz": {
+    "displayName": "Site Style",
+    "category": "transformer",
+    "quartzVersion": ">=5.0.0"
+  }
+}
