@@ -1,0 +1,36 @@
+.graphviz-container {
+	position: relative;
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+.graphviz-container.graphviz-fit .graphviz-svg {
+	max-width: 100%;
+	height: auto;
+}
+
+.graphviz-container.graphviz-overflow .graphviz-svg {
+	max-width: none;
+}
+
+.graphviz-toggle {
+	position: absolute;
+	top: 34px;
+	right: 4px;
+	width: 30px;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.15s;
+	padding: 2px 6px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--background-secondary);
+	color: var(--text-muted);
+	border: 1px solid var(--background-modifier-border);
+}
+
+.graphviz-container:hover .graphviz-toggle {
+	opacity: 1;
+}

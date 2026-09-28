@@ -39,6 +39,7 @@ rm -f content/_syntax-probe.md && npx quartz build   # 收尾：清掉探针并�
 | `==高亮==` | `<span class="text-highlight">` | **不是 `<mark>`**，按 `mark` 去查会误判成"不支持" |
 | `$…$` / `$$…$$` | KaTeX | 见下方"化学式"一条 |
 | ` ```mermaid ` | `<svg>` | 用离线插件渲染 |
+| ` ```dot `（Graphviz） | `<svg>`（浏览器端 viz.js） | `local-plugins/dot-viz`，WASM 内置于 `quartz/static/viz/`；颜色跟随主题、显式指定的颜色原样保留；语法错误时退化为代码块（构建不报错） |
 | 任务列表 `- [ ]` | checkbox | |
 | 表格、标题、列表、加粗、斜体、引用 | 标准输出 | |
 
