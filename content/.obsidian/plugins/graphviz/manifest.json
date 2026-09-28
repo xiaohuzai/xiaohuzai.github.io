@@ -1,0 +1,11 @@
+{
+	"id": "graphviz",
+	"name": "Graphviz View",
+	"version": "1.0.2",
+	"minAppVersion": "1.0.0",
+	"description": "Add graphviz support",
+	"author": "jw0785",
+	"authorUrl": "https://github.com/jw0785",
+	"fundingUrl": "https://github.com/sponsors/jw0785",
+	"isDesktopOnly": true
+}

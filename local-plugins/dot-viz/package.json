@@ -1,0 +1,14 @@
+{
+  "name": "dot-viz",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "把 ```dot（Graphviz）代码块在浏览器端渲染成 SVG：viz.js（Graphviz 的 WASM 构建，二进制内嵌于 JS）放在站内 /static/viz/，无外网依赖；渲染失败时退化为原始代码块",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "dot-viz",
+    "displayName": "Dot (Graphviz) Renderer",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}
