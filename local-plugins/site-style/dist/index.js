@@ -92,6 +92,17 @@ const SITE_STYLE_CSS = `
   --text-highlight-bg: var(--textHighlight);
 }
 
+/* ---------- ==高亮== 浅色模式可读性修正（换 catppuccin 后补） ----------
+   主题包直接给 .text-highlight 画了不透明 rosewater 底 + 浅色文字，浅色（Latte）
+   下实测对比度只有 2.17:1（WCAG AA 要求 4.5）。只在浅色模式把文字压回正文色、
+   底色改用 colors: 里的半透明 rosewater；深色模式主题本身对比 13.9，保持原样。
+   本注入无 layer 且选择器特异度高，稳压主题包 @layer 里的同名定义。 */
+:root:root[saved-theme="light"] .text-highlight,
+:root:root[saved-theme="light"] article mark {
+  background-color: var(--textHighlight);
+  color: var(--darkgray);
+}
+
 /* ---------- 字体栈 ---------- */
 :root {
   /* Inter 只有拉丁字形；中文显式落到系统黑体栈，避免各平台乱跳 */

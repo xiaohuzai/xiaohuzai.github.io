@@ -93,9 +93,9 @@ frontmatter 常用字段：`title` / `date` / `tags`。posts 用 ASCII 文件名
 
 ### 外观主题
 
-主题用 [quartz-themes](https://quartz-themes.github.io/) 的 **Flexoki** 打底（组件样式层），配色与排版由本站自己接管：
+主题用 [quartz-themes](https://quartz-themes.github.io/) 的 **catppuccin**（亮色 Latte / 暗色 Mocha，2026-10 从 Flexoki 换过来，选型对比见当时 245 个主题的下载量榜单）打底（组件样式层），配色与排版由本站自己接管：
 
-- **调色板**：`configuration.theme.colors`（暖纸 + 深祖母绿，亮暗两套），经 `local-plugins/config-palette` 以无 layer 样式注入——改配置即生效；
+- **调色板**：`configuration.theme.colors`（catppuccin 的 Latte/Mocha 九色，数值解析自主题包变量链），经 `local-plugins/config-palette` 以无 layer 样式注入——改配置即生效；
 - **语义色**：主题包的 aspect 规则走 `--background-primary`/`--color-base-*` 变量链（值硬编码在主题包里，会绕过上面的调色板），`local-plugins/site-style` 把这些语义变量重新绑到调色板变量上；
 - **字体**：Inter + JetBrains Mono **自托管**（woff2 在 `quartz/static/fonts/`，`local-plugins/site-style` 注入 `@font-face`），不走 Google Fonts CDN（国内访问无外网依赖）。`fontOrigin: local` 让核心不再注入 CDN 链接；
 - **排版/组件精修**：也在 `local-plugins/site-style`（行高节奏、callout/代码块/表格/侧栏细节）。
@@ -106,7 +106,7 @@ frontmatter 常用字段：`title` / `date` / `tags`。posts 用 ASCII 文件名
 # quartz.config.yaml
   - source: "@quartz-themes/core"
     options:
-      theme: flexoki    # ← 改这里
+      theme: catppuccin    # ← 改这里
 ```
 
 ```bash

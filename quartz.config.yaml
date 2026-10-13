@@ -25,29 +25,34 @@ configuration:
       header: Inter
       body: Inter
       code: JetBrains Mono
-    # 配色：暖纸 + 深祖母绿的编辑风。亮色是暖白纸面，暗色是暖炭黑，强调色是深青绿。
+    # 配色：catppuccin（亮色 Latte / 暗色 Mocha）。数值解析自主题包
+    # @quartz-themes/catppuccin 的调色板变量链：--light←ctp-base、--lightgray←ctp-mantle、
+    # --gray←ctp-subtext0、--darkgray/--dark←ctp-text、--secondary/--tertiary←主题的
+    # --text-accent（Latte #7287FD / Mocha #B4BEFE）。链接颜色不在此列：主题直接用
+    # ctp-blue 给链接着色，改 secondary 不影响链接。highlight 没照抄主题的 100% 不透明
+    # rosewater（Mocha 浅字压浅底看不清），按本站调好的透明度写。
     # config-palette 会以无 layer 样式注入，优先级高于主题包——改这里即生效。
     colors:
       lightMode:
-        light: "#FCFBF6"
-        lightgray: "#F1EFE7"
-        gray: "#6E6B62"
-        darkgray: "#2A2822"
-        dark: "#1A1914"
-        secondary: "#0F766B"
-        tertiary: "#0D9488"
-        highlight: rgba(15, 118, 107, 0.08)
-        textHighlight: "#FFCA4766"
+        light: "#EFF1F5"
+        lightgray: "#E6E9EF"
+        gray: "#6C6F85"
+        darkgray: "#4C4F69"
+        dark: "#4C4F69"
+        secondary: "#7287FD"
+        tertiary: "#7287FD"
+        highlight: rgba(220, 138, 120, 0.4)
+        textHighlight: "#DC8A7866"
       darkMode:
-        light: "#131211"
-        lightgray: "#1D1B18"
-        gray: "#8C8880"
-        darkgray: "#C8C4B8"
-        dark: "#EFEBE0"
-        secondary: "#3EB8A4"
-        tertiary: "#2CA892"
-        highlight: rgba(62, 184, 164, 0.12)
-        textHighlight: "#FFCA4747"
+        light: "#1E1E2E"
+        lightgray: "#181825"
+        gray: "#A6ADC8"
+        darkgray: "#CDD6F4"
+        dark: "#CDD6F4"
+        secondary: "#B4BEFE"
+        tertiary: "#B4BEFE"
+        highlight: rgba(245, 224, 220, 0.28)
+        textHighlight: "#F5E0DC47"
 plugins:
   - source: "@quartz-community/created-modified-date"
     enabled: true
@@ -62,8 +67,8 @@ plugins:
     enabled: true
     options:
       theme:
-        light: github-light
-        dark: github-dark
+        light: catppuccin-latte
+        dark: catppuccin-mocha
       keepBackground: false
     order: 20
   - source: "@quartz-community/obsidian-flavored-markdown"
@@ -124,7 +129,7 @@ plugins:
   - source: "@quartz-themes/core"
     enabled: true
     options:
-      theme: flexoki
+      theme: catppuccin
       mode: both
   - source: "@quartz-community/remove-draft"
     enabled: true
