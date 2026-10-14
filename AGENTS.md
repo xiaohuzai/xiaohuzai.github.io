@@ -72,6 +72,7 @@
 - 流程图/「A → B → C」的链条也别用 `text` 块：短链条写成加粗行内（`**目标功能 → 结构 → 序列**`），真流程用 mermaid
 - mermaid 走本地镜像（无外网依赖），常规流程图/时序图可用；**mermaid 不支持化学结构**；**节点与边标签都不要以列表标记开头**（`+ `、`1. `、`2. ` 等——会被 mermaid 的 markdown 管线当列表，渲染成 "Unsupported markdown: list" 错误节点；编号步骤用 `①②③` 圈号，加法节点用 `((⊕))`）；节点里换行用 `<br/>`
 - ` ```dot `（Graphviz）代码块两边都能渲染：Obsidian 靠 graphviz 插件，站点靠 `local-plugins/dot-viz`（内置 viz.js，浏览器端渲染成 SVG，颜色自动跟随明暗主题，dot 里显式指定的颜色原样保留）。**渲染失败只退化为代码块、构建不报错**——改完要在浏览器里看一眼
+- ` ```markmap ` 大纲块两边都能渲染：Obsidian 靠 Mindmap NextGen 插件，站点靠 `local-plugins/markmap-viz`（渲染栈 bundle 在 `quartz/static/markmap/`，按需加载、无外网依赖；分支色是固定调色板，文字跟随明暗主题）。块内可写 `markmap:` YAML 配置头（两边都认）；节点文本走 markdown-it 精简管线——**数学、代码高亮这些重插件没打进去，别在节点里用**。**渲染失败只退化为代码块**——改完在浏览器里看一眼
 - 图片用相对路径 `attachments/xxx.png`；文件名避免空格和全角括号
 - 裸 URL 会自动变成链接，`原文：https://…` 这种写法直接用
 

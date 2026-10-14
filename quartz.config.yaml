@@ -245,6 +245,11 @@ plugins:
   # （WASM 单文件在 quartz/static/viz/，无外网依赖；语法错误时保留原始代码块）
   - source: "./local-plugins/dot-viz"
     enabled: true
+  # ```markmap 大纲代码块：浏览器端渲染成交互式脑图（Obsidian 端由 Mindmap NextGen
+  # 渲染同样的块；渲染栈 bundle 在 quartz/static/markmap/，按需加载、无外网依赖，
+  # 解析/渲染失败时保留原始代码块）
+  - source: "./local-plugins/markmap-viz"
+    enabled: true
   # 化学式：构建链路里的 KaTeX 没有 mhchem 扩展，直接写 \ce{...} 会渲染成红色的 "\ce"；
   # 这里在解析 markdown 之前把它翻译成等价的 KaTeX（Obsidian 那边 MathJax 本来就认 \ce）
   - source: "./local-plugins/mhchem-lite"

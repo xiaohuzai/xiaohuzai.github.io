@@ -1,0 +1,14 @@
+{
+  "name": "markmap-viz",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "把 ```markmap 大纲代码块在浏览器端渲染成交互式脑图（折叠/缩放）：markmap 渲染栈打成的单文件 ESM bundle 放在站内 /static/markmap/，无外网依赖；渲染失败时退化为原始代码块。Obsidian 端同样的块由 Mindmap NextGen 插件渲染",
+  "main": "./dist/index.js",
+  "quartz": {
+    "name": "markmap-viz",
+    "displayName": "Markmap Renderer",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0"
+  }
+}
