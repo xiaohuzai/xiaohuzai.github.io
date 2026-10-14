@@ -40,6 +40,7 @@ rm -f content/_syntax-probe.md && npx quartz build   # 收尾：清掉探针并�
 | `$…$` / `$$…$$` | KaTeX | 见下方"化学式"一条 |
 | ` ```mermaid ` | `<svg>` | 用离线插件渲染 |
 | ` ```dot `（Graphviz） | `<svg>`（浏览器端 viz.js） | `local-plugins/dot-viz`，WASM 内置于 `quartz/static/viz/`；颜色跟随主题、显式指定的颜色原样保留；语法错误时退化为代码块（构建不报错） |
+| ` ```markmap `（大纲） | 交互式 SVG 脑图（折叠/缩放） | `local-plugins/markmap-viz`，bundle 在 `quartz/static/markmap/`（markmap-lib no-plugins 基座 + markmap-view，gzip 约 140KB，有块才按需加载）；分支色固定调色板、文字跟随主题；块内支持 `markmap:` YAML 头；节点**没有**数学/代码高亮插件；失败退化为代码块（构建不报错）。注意 `markmap` 渲染要 svg 先进 DOM 再建图，否则 zoom 出 NaN |
 | 任务列表 `- [ ]` | checkbox | |
 | 表格、标题、列表、加粗、斜体、引用 | 标准输出 | |
 
