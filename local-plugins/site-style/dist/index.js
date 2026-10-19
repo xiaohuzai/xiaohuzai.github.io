@@ -115,6 +115,56 @@ const SITE_STYLE_CSS = `
   --font-interface: var(--bodyFont);
 }
 
+/* ---------- 顶部留白与页头 ----------
+   Quartz 默认给 .page-header 6rem 上边距、侧栏 6rem 上内边距，首屏有近 100px
+   空白；收到 4rem 后页头与左侧搜索/探索树顶端对齐，首屏能多放一段正文。 */
+.page-header {
+  margin-top: 4rem;
+}
+@media all and (min-width: 801px) {
+  .sidebar.left,
+  .sidebar.right {
+    padding-top: 4rem;
+  }
+}
+
+/* 站标与图标导航原来分两行，中间还夹一条分割线；桌面端并成一行，
+   站标靠左、导航靠右，页头高度从约 130px 降到 60px 左右。 */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--dark) 8%, transparent);
+}
+#links-nav-container {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+#links-nav {
+  margin: 0;
+  flex-wrap: nowrap;
+}
+#links-nav-container hr {
+  display: none;
+}
+@media all and (max-width: 800px) {
+  header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  /* 核心样式在窄屏把 .page-title 隐藏了（原意是侧栏里有站名），
+     本站没用 page-title 插件、站名只在这里出现，所以要把站标放回来 */
+  .site-logo.page-title {
+    display: block;
+  }
+  .page-header {
+    margin-top: 2rem;
+  }
+}
+
 /* ---------- 正文节奏（中文阅读：行高放宽、段落呼吸） ---------- */
 body {
   -webkit-font-smoothing: antialiased;
@@ -137,22 +187,42 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.012em;
   font-weight: 650;
 }
-.page article > h1 {
+/* 标题用正文色，强调色只留给链接与交互元素；整页蓝色标题会显得像默认模板 */
+article h2,
+article h3,
+article h4,
+article h5,
+article h6 {
+  color: var(--darkgray);
+}
+/* 文章标题由 article-title 插件放在 .page-header 里，不在 article 内 */
+.page-header h1.article-title {
   font-size: 2.05rem;
   font-weight: 700;
   letter-spacing: -0.022em;
   line-height: 1.35;
-  margin: 0.6rem 0 1.4rem;
+  margin: 0.6rem 0 1rem;
 }
-article > h2 {
+article h2 {
   font-size: 1.52rem;
   margin: 2.7rem 0 1rem;
 }
-article > h3 {
+/* 小节标题前的短竖条：提供层级锚点，又不用把整行字染成强调色 */
+article h2::before {
+  content: "";
+  display: inline-block;
+  width: 0.26rem;
+  height: 0.92em;
+  margin-right: 0.55rem;
+  vertical-align: -0.07em;
+  border-radius: 999px;
+  background: var(--secondary);
+}
+article h3 {
   font-size: 1.22rem;
   margin: 2.15rem 0 0.85rem;
 }
-article > h4, article > h5, article > h6 {
+article h4, article h5, article h6 {
   margin: 1.8rem 0 0.75rem;
 }
 
@@ -162,15 +232,27 @@ article a {
   text-underline-offset: 3px;
   transition: color 0.15s ease;
 }
-/* 双链：淡底色 chip，和行内代码一样「标记」而不是「涂鸦」 */
+/* 双链默认给淡底 chip（反链、标签等短列表里仍然好看），
+   但正文里的双链用下划线就够；整段文字里散布橙色底片会割裂阅读。 */
 a.internal {
-  background-color: var(--highlight);
+  background-color: color-mix(in srgb, var(--secondary) 9%, transparent);
   border-radius: 4px;
   padding: 0.04em 0.22em;
   line-height: inherit;
 }
 a.internal:hover {
-  background-color: color-mix(in srgb, var(--secondary) 18%, transparent);
+  background-color: color-mix(in srgb, var(--secondary) 16%, transparent);
+}
+article a.internal {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--secondary) 40%, transparent);
+}
+article a.internal:hover {
+  background: none;
+  text-decoration-color: var(--secondary);
 }
 
 /* ---------- 行内代码 / 代码块 ---------- */
@@ -287,10 +369,26 @@ article img {
 }
 
 /* ---------- 侧栏：探索树 ---------- */
+/* 树展开后可能比视口高。给列表自己一个滚动区，避免条目把整页顶下去；
+   同时也让插件对当前页的 scrollIntoView 作用在列表内，而不是滚动整个窗口。 */
+@media all and (min-width: 801px) {
+  .explorer {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: visible;
+  }
+  .explorer-content {
+    overflow-y: auto;
+    max-height: calc(100vh - 13rem);
+    overscroll-behavior: contain;
+    padding-right: 0.35rem;
+  }
+}
 .explorer-content ul li > a {
   border-radius: 6px;
-  padding: 0.18rem 0.5rem;
-  font-size: 0.93rem;
+  padding: 0.14rem 0.45rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
   transition: background-color 0.12s ease;
 }
 .explorer-content ul li > a:hover {
@@ -301,9 +399,10 @@ article img {
   color: var(--secondary);
   font-weight: 600;
 }
-.folder-container div > a {
+.folder-container div > a,
+.folder-container div > button span {
   font-family: var(--headerFont);
-  font-size: 0.93rem;
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
@@ -320,6 +419,27 @@ button.toc-header h3,
 ul.toc-content.overflow > li > a {
   line-height: 1.55;
 }
+/* toc-tree 用 opacity 压层级，浅色下会灰得发虚；改为直接取色，当前节用强调色 */
+ul.toc-content.overflow > li.depth-0 > a {
+  color: var(--darkgray);
+  opacity: 0.72;
+}
+ul.toc-content.overflow > li.depth-0 > a.in-view {
+  color: var(--secondary);
+  opacity: 1;
+}
+ul.toc-content.overflow > li.depth-1 > a,
+ul.toc-content.overflow > li.depth-2 > a,
+ul.toc-content.overflow > li.depth-3 > a {
+  color: var(--gray);
+  opacity: 0.9;
+}
+ul.toc-content.overflow > li.depth-1 > a.in-view,
+ul.toc-content.overflow > li.depth-2 > a.in-view,
+ul.toc-content.overflow > li.depth-3 > a.in-view {
+  color: var(--secondary);
+  opacity: 1;
+}
 .backlinks > ul.overflow > li > a {
   border-radius: 6px;
   padding: 0.22rem 0.55rem;
@@ -328,16 +448,95 @@ ul.toc-content.overflow > li > a {
   background-color: var(--highlight);
 }
 
+/* ---------- 面包屑 / 属性 / 文章元信息 ---------- */
+.breadcrumb-container {
+  margin-top: 0.9rem;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--gray);
+}
+.breadcrumb-element p {
+  margin-left: 0.35rem;
+  opacity: 0.55;
+}
+.breadcrumb-element a {
+  color: var(--gray);
+}
+.breadcrumb-element a:hover {
+  color: var(--secondary);
+}
+.content-meta {
+  font-size: 0.82rem;
+  color: var(--gray);
+  margin-bottom: 0.9rem;
+}
+/* note-properties 的折叠条标题是硬编码英文 "Properties"，这里用伪元素换成中文，
+   并收成一枚小胶囊，避免夹在标题和日期之间像一行系统输出。 */
+.note-properties {
+  margin: 0.1rem 0 0.55rem;
+}
+.note-properties-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  background: var(--lightgray);
+  color: var(--gray);
+  font-size: 0.76rem;
+  cursor: pointer;
+  list-style: none;
+}
+.note-properties-header::-webkit-details-marker {
+  display: none;
+}
+.note-properties-title {
+  font-size: 0;
+}
+.note-properties-title::before {
+  content: "属性";
+  font-size: 0.76rem;
+}
+.note-properties-count {
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+.note-properties-table {
+  margin-top: 0.55rem;
+  font-size: 0.85rem;
+}
+
+/* 文件夹/标签/404 页的右栏被 layout 清空，但三列网格仍预留 320px 空白条。
+   收掉空右栏、让中间内容用满宽度；浏览器不支持 :has 时退回原布局。 */
+@media all and (min-width: 1200px) {
+  .page > #quartz-body:has(> .sidebar.right:empty) {
+    grid-template-columns: 320px minmax(0, 1fr);
+    grid-template-areas:
+      "grid-sidebar-left grid-header"
+      "grid-sidebar-left grid-center"
+      "grid-sidebar-left grid-footer";
+  }
+  .page > #quartz-body:has(> .sidebar.right:empty) > .sidebar.right {
+    display: none;
+  }
+}
+
 /* ---------- 导航 / 页脚 ---------- */
 .links-nav-item {
   font-weight: 500;
   border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.95rem;
+}
+.site-logo .logo-mark svg {
+  width: 2.1rem;
+  height: 2rem;
 }
 .site-logo .logo-word {
   font-family: var(--headerFont);
   font-weight: 700;
   letter-spacing: 0.015em;
-  font-size: 1.62rem;
+  font-size: 1.45rem;
 }
 footer {
   font-size: 0.85rem;
@@ -349,23 +548,122 @@ ul.footer-extras a:hover {
   color: var(--secondary);
 }
 
+/* ---------- 首页 ----------
+   首页只有一段欢迎语和两条入口。把首段做成导语、两条入口做成两列卡片，
+   空着的左右栏配合展开的探索树，首屏不再像一张没写完的模板页。 */
+body[data-slug="index"] .content-meta {
+  display: none;
+}
+body[data-slug="index"] article .markdown-preview-view > p:first-child {
+  font-size: 1.12rem;
+  line-height: 1.75;
+  color: var(--gray);
+  margin-top: 0.35rem;
+}
+body[data-slug="index"] article .markdown-preview-view > ul:first-of-type {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 1.15rem 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+body[data-slug="index"] article .markdown-preview-view > ul:first-of-type > li {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--dark) 8%, transparent);
+  border-radius: 10px;
+  background: var(--lightgray);
+  line-height: 1.65;
+}
+body[data-slug="index"] article .markdown-preview-view > ul:first-of-type > li > a {
+  font-weight: 650;
+}
+
 /* ---------- 窄屏 ---------- */
 @media screen and (max-width: 720px) {
   article {
     font-size: 0.98rem;
   }
-  .page article > h1 {
+  .page-header h1.article-title {
     font-size: 1.72rem;
   }
-  article > h2 {
+  article h2 {
     font-size: 1.38rem;
     margin-top: 2.25rem;
   }
-  article > h3 {
+  article h3 {
     font-size: 1.14rem;
+  }
+  body[data-slug="index"] article .markdown-preview-view > ul:first-of-type {
+    grid-template-columns: 1fr;
   }
 }
 `
+
+// 探索树（@quartz-community/explorer）在首次渲染时会对当前页条目调用
+// scrollIntoView({behavior:"smooth"})。该调用没有限定滚动容器，深链接页面一打开
+// 就会把整个文档滚到正文中部（实测 /notes/.../分子 自动 scrollY≈500）。
+// 这里在插件脚本之前写入一个 explorerScrollTop，让它走「恢复列表滚动位置」分支、
+// 跳过 scrollIntoView；随后再只把当前条目滚进探索树自己的滚动区。
+// 另外该版本的 folderDefaultState 选项只写进 data-collapsed、渲染时并未读取，
+// 所以首访目录树总是折叠的；这里按「localStorage 里没有记录才算默认」补开一次，
+// 用户手动折叠过的目录仍保持折叠。
+const EXPLORER_SCROLL_GUARD = `(function () {
+  try {
+    if (sessionStorage.getItem("explorerScrollTop") === null) {
+      sessionStorage.setItem("explorerScrollTop", "0");
+    }
+  } catch (e) {}
+
+  function savedState() {
+    var map = {};
+    try {
+      JSON.parse(localStorage.getItem("fileTree") || "[]").forEach(function (n) {
+        map[n.path] = n.collapsed;
+      });
+    } catch (e) {}
+    return map;
+  }
+
+  function openFolders() {
+    var saved = savedState();
+    var folders = document.querySelectorAll(".explorer .folder-container");
+    var count = 0;
+    for (var i = 0; i < folders.length; i++) {
+      var path = folders[i].dataset.folderpath;
+      var outer = folders[i].nextElementSibling;
+      if (!outer) continue;
+      count++;
+      if (saved[path] === undefined) outer.classList.add("open");
+    }
+    return count;
+  }
+
+  function revealActive() {
+    var box = document.querySelector(".explorer-ul") || document.querySelector(".explorer-content");
+    if (!box) return;
+    var active = box.querySelector("a.active");
+    if (!active) return;
+    var b = box.getBoundingClientRect();
+    var a = active.getBoundingClientRect();
+    if (a.top < b.top || a.bottom > b.bottom) {
+      box.scrollTop += (a.top - b.top) - box.clientHeight / 2 + a.height / 2;
+    }
+  }
+
+  function refresh(tries) {
+    tries = tries || 0;
+    if (openFolders() === 0) {
+      if (tries < 20) setTimeout(function () { refresh(tries + 1); }, 150);
+      return;
+    }
+    revealActive();
+  }
+
+  window.addEventListener("load", function () { setTimeout(refresh, 100); });
+  document.addEventListener("nav", function () { setTimeout(refresh, 100); });
+})();`
 
 export function SiteStyle() {
   return {
@@ -377,6 +675,9 @@ export function SiteStyle() {
         css: [
           { content: FONT_FACES_CSS, inline: true },
           { content: SITE_STYLE_CSS, inline: true },
+        ],
+        additionalHead: [
+          h("script", { dangerouslySetInnerHTML: { __html: EXPLORER_SCROLL_GUARD } }),
         ],
       }
     },
