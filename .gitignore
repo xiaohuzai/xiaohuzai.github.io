@@ -23,3 +23,5 @@ content/.trash/
 content/wiki/
 content/.llm-wiki-backups/
 theme-preview-hub/
+# 本地截图（外观检查用，不随站点发布）
+.screenshots/

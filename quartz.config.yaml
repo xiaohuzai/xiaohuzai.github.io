@@ -96,6 +96,7 @@ plugins:
     layout:
       position: right
       priority: 30
+      condition: has-toc # 首页等没有标题的页面不显示空目录
   - source: "@quartz-community/crawl-links"
     enabled: true
     options:
@@ -175,6 +176,10 @@ plugins:
     enabled: true
   - source: "@quartz-community/explorer"
     enabled: true
+    options:
+      # 语义上的默认值。当前版本的 explorer 只把它写成 data-collapsed、
+      # 渲染时并未读取，实际的首访展开由 local-plugins/site-style 里的脚本兜底
+      folderDefaultState: open
     layout:
       position: left
       priority: 50
@@ -207,6 +212,7 @@ plugins:
     layout:
       position: beforeBody
       priority: 20
+      condition: not-index # 首页不显示「某日期，1 分钟阅读」
   - source: "@quartz-community/tag-list"
     enabled: false
     layout:
@@ -284,6 +290,7 @@ plugins:
     # 关掉后面包屑止于上级目录
     options:
       showCurrentPage: false
+      rootName: 首页
     layout:
       position: beforeBody
       priority: 5
