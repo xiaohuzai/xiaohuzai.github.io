@@ -25,3 +25,5 @@ content/.llm-wiki-backups/
 theme-preview-hub/
 # 本地截图（外观检查用，不随站点发布）
 .screenshots/
+# wesight（AI 协作插件）的本地数据：私人社媒草稿，不进公开仓库
+content/.wesight/
