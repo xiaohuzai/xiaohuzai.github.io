@@ -23,7 +23,7 @@ vault 的关键设置已随仓库提交（`content/.obsidian/app.json`），打�
 
 各台机器自己 churn 的状态（`workspace.json`、缓存）在 `.gitignore` 里，换电脑 clone 下来就是干净配置。
 
-**哪些写法站上认**——写笔记完全按 Obsidian 习惯来，这些都 Quartz 会渲染（活例子见 `content/posts/2026-09-17-hello-world.md`，照抄即可）：
+**哪些写法站上认**——写笔记完全按 Obsidian 习惯来，这些都 Quartz 会渲染（活例子见 `content/notes/AI4S/AlphaFold/AlphaFold-Decode/` 下的课程笔记，照抄即可）：
 
 - `[[双链]]`、`![[整篇嵌入]]`、块引用，以及右侧的图谱和反链面板
 - callout（`> [!tip]`）、`==高亮==`、`%%注释%%`（注释只留在本地，站上隐藏）
@@ -82,7 +82,7 @@ npx quartz build --serve    # http://localhost:8080，改文件自动刷新
 
 frontmatter 常用字段：`title` / `date` / `tags`。posts 用 ASCII 文件名是因为 URL 会被分享，notes 用中文名是因为双链按文件名引用、写着自然。
 
-全部写作语法（双链、callout、整篇嵌入、mermaid、公式）的活例子在 `content/posts/2026-09-17-hello-world.md`，照抄即可。
+双链、callout、mermaid、公式这些常用语法的活例子在 `content/notes/AI4S/AlphaFold/AlphaFold-Decode/` 下的课程笔记，照抄即可。
 
 ## 站点配置
 
