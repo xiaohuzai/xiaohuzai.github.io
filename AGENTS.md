@@ -76,7 +76,7 @@
 - 图片用相对路径 `attachments/xxx.png`；文件名避免空格和全角括号
 - 裸 URL 会自动变成链接，`原文：https://…` 这种写法直接用
 
-**站上认的 Obsidian 语法**（活例子：`content/posts/2026-09-17-hello-world.md`）
+**站上认的 Obsidian 语法**（活例子：`content/notes/AI4S/AlphaFold/AlphaFold-Decode/` 下的课程笔记，callout、双链、公式、mermaid/dot 都有）
 
 - 双链 `[[…]]`、别名 `[[…|…]]`、整篇嵌入、块引用、反链面板
 - callout `> [!note]` / `> [!warning]`（渲染成带图标的提示框，实测可用）
