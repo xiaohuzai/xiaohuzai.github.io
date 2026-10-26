@@ -1,13 +1,10 @@
 [
   "obsidian-minimal-settings",
-  "obsidian-style-settings",
   "obsidian-hider",
-  "editing-toolbar",
-  "obsidian-icon-folder",
-  "table-editor-obsidian",
-  "colorful-folders",
   "mermaid-tools",
   "qiaomu-ai-rss",
   "graphviz",
-  "obsidian-mindmap-nextgen"
+  "obsidian-mindmap-nextgen",
+  "editing-toolbar",
+  "gfm-table-fix"
 ]

@@ -1,0 +1,8 @@
+{
+  "id": "gfm-table-fix",
+  "name": "GFM Table Fix",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "description": "Render GFM pipe tables that the core parser rejects (e.g. empty header cell: ||a|b|)",
+  "isDesktopOnly": false
+}
